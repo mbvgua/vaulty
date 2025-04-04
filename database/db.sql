@@ -11,10 +11,10 @@ CREATE TABLE userBasicInfo(
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
     isEmailVerified BOOLEAN DEFAULT 0,
     isDeleted BOOLEAN DEFAULT 0
-)
+);
 
 -- indexes
-CREATE UNIQUE INDEX usernameIndex userBasicInfo(username);
+CREATE UNIQUE INDEX usernameIndex ON userBasicInfo(username);
 CREATE UNIQUE INDEX emailIndex ON userBasicInfo(email);
 
 -- INSERT DUMMY DATA
@@ -42,9 +42,9 @@ CREATE TABLE userPersonalInfo(
 
 -- INSERT DUMMY DATA
 INSERT INTO userPersonalInfo VALUES
-    (DEFAULT,2,'male','1998-04-23','profiles/admin.jpeg',1),
-    (DEFAULT,3,'female','2000-07-03','profiles/user1.jpeg',1),
-    (DEFAULT,4,'female','2001-01-17','profiles/user2.jpeg',1)
+    (DEFAULT,1,'male','1998-04-23','profiles/admin.jpeg',1,DEFAULT),
+    (DEFAULT,2,'female','2000-07-03','profiles/user1.jpeg',1,DEFAULT),
+    (DEFAULT,3,'female','2001-01-17','profiles/user2.jpeg',1,DEFAULT)
 ;
 
 
@@ -141,6 +141,7 @@ delimiter ;
 delimiter #
 
 -- trigger to automatically change lastUpdated column when one changes their dp
+-- could be used for last seen and such
 CREATE TRIGGER lastProfileUpdate BEFORE UPDATE
 ON userPersonalInfo FOR EACH ROW
 BEGIN
@@ -153,6 +154,37 @@ END
 delimiter ;
 
 -- views
+delimiter #
+-- view showing all verified emails
+CREATE VIEW verifiedUserEmails
+AS
+    SELECT id,username,email FROM userBasicInfo
+    WHERE isEmailVerified=1
+    AND isDeleted=0;
+#
+
+CREATE VIEW deletedAccounts
+AS
+    SELECT id,username,email,phoneNumber FROM userBasicInfo 
+    WHERE isDeleted=1;
+#
+
+CREATE VIEW genderBalance
+AS
+    SELECT gender,COUNT(*) AS totals
+    FROM userPersonalInfo
+    GROUP BY gender;
+#
+
+-- CREATE VIEW averageUserAge
+-- AS
+--     SELECT userId,dob,CURR_DATE-dob AS age FROM userPersonalInfo
+--     WHERE userId={SELECT id,username,email 
+--     FROM userBasicInfo
+--     WHERE isDeleted=0}
+-- #
+
+delimiter ;
 
 -- functions
 
