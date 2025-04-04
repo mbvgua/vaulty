@@ -27,3 +27,10 @@ The second table has 5 columns:
 - profilePic: 
 - agreedToTos: ensure user agrees to the terms terms of service of application. Must be true 
 
+
+To create the entire database using a script, run:
+```sh
+    $ mysql -uroot -p <db.sql> output.tab
+```
+on the mysql shell version, you will be prompted to input your password, and if everything is successfully be returned back to your normal shell.
+
