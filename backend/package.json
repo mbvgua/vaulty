@@ -4,6 +4,9 @@
   "description": "backend logic for app",
   "main": "index.js",
   "scripts": {
+    "start:build":"tsc -w",
+    "start:run":"nodemon dist/server.js",
+    "start":"concurrently npm:start:*",
     "test": "jest"
   },
   "keywords": [
