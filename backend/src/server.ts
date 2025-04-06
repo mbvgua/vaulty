@@ -1,5 +1,7 @@
-import express,{Request,Response,json} from 'express'
+import express,{json} from 'express'
 import dotenv from 'dotenv'
+
+import authRouter from './routes'
 
 dotenv.config()
 
@@ -8,10 +10,7 @@ const port = process.env.PORT
 
 // middleware. add body to all requests
 app.use(json())
-
-app.get('/hello',(request:Request,response:Response)=>{
-    response.status(200).json('How you doing?')
-})
+app.use('/auth',authRouter)
 
 
 app.listen(port,()=>{
