@@ -3,6 +3,10 @@ import mysql from 'mysql2/promise'
 import {v4 as uid} from 'uuid'
 
 import { sqlConfig } from "./config";
+import { UsersBasicInfo } from "./models";
+
+const pool = mysql.createPool(sqlConfig)
+
 
 export async function registerUser(request:Request,response:Response){
     /*
@@ -16,8 +20,7 @@ export async function registerUser(request:Request,response:Response){
     const {username,email,phoneNumber,password} = request.body
     
     try {
-        const connection = await mysql.createConnection(sqlConfig)
-        const [results,fields] = await connection.query(
+        const [results,fields] = await pool.query(
           `INSERT INTO userBasicInfo VALUES(
           '${id}',
           '${username}',
@@ -31,7 +34,42 @@ export async function registerUser(request:Request,response:Response){
           `
         )  
         console.log(results)
+        return response.status(200).json('User added successfuly!')
       } catch (error) {
           console.log(error)
+          return response.status(400).json('Oops! An error occurred!')
       }
+}
+
+export async function loginUser(request:Request,response:Response){
+    /*
+     * Login already existing users into the system
+     * if any error occurrs, user will not be added to system
+     * appropriate response message and codes are sent back
+    */
+
+    const {email,password} = request.body
+    try {
+      const [results,fields] = await pool.query(
+        `SELECT * FROM userBasicInfo WHERE
+        email='${email}' AND isDeleted=0;`
+      )
+      // console.log(results)
+      const [user] = results as Array<UsersBasicInfo>
+      console.log(user)
+      if (user){
+        // if passwords match
+        if (password === user.password){
+          return response.status(200).json(`Congratulations ${user.username}!You have successfully logged in.`)
+          // if they dont match
+        } else {
+          return response.status(400).json(`Oh no!Seems like the passwords do not match. Try again?`)
+        }
+      } else {
+        return response.status(400).json('User not found')
+      }      
+    } catch (error) {
+      console.log(error)
+    }
+
 }

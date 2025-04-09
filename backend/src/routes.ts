@@ -1,11 +1,11 @@
 import { Router } from "express"
 
-import { registerUser } from "./auth"
+import { loginUser, registerUser } from "./auth"
 
 const authRouter:Router = Router()
 
 authRouter.post('/register',registerUser)
-
+authRouter.post('/login',loginUser)
 
 
 
