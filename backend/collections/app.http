@@ -33,16 +33,20 @@ Content-Type: application/json
 GET http://localhost:4000/auth/get-all
 
 ###############
-# update all users
+# update users
 PATCH http://localhost:4000/auth/update/2
 Content-Type: application/json
 
 {
-    "username":"Edward",
-    "email":"eduardo@gmail.com",
+    "username":"Ziggler",
+    "email":"zig@gmail.com",
     "phoneNumber":"0712345678",
     "password":"@Lancez23"
 }
 
 ###############
 # deactivate account
+PATCH http://localhost:4000/auth/deactivate/dd62e609-bb27-4517-9917-fde01e055bd4
+
+#############
+# reactivate account

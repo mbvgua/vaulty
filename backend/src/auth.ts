@@ -36,6 +36,8 @@ export async function registerUser(request:Request,response:Response){
         '${phoneNumber}',
         '${password}',
         DEFAULT,
+        DEFAULT,
+        0,
         0,
         0
         );`
@@ -214,18 +216,11 @@ export async function updateUser(request:Request<{id:string}>,response:Response)
       // update data accordingly
       const [rows2,fields2] = await pool.query(
         `UPDATE userBasicInfo SET 
-        username='${username}'
-        email='${email}'
-        password='${password}'
+        username='${username}',
+        email='${email}',
+        password='${password}',
         phoneNumber='${phoneNumber}'
         WHERE id='${user[0].id}' AND isDeleted=0;`
-        // updates when not null
-        // `UPDATE userBasicInfo SET 
-        // username=IFNULL(?,'${username}'),
-        // email=IFNULL(?,'${email}'),
-        // password=IFNULL(?,'${password}'),
-        // phoneNumber=IFNULL(?,'${phoneNumber}')
-        // WHERE id='${user[0].id}' AND isDeleted=0;`
       )
       // response message
       return response.status(200).json({message:`Congratuations! You have successfully updated ${user[0].username}'s profile`})
@@ -247,5 +242,34 @@ export async function deactivateAccount(request:Request<{id:string}>,response:Re
    * if user does not reativate back in 7 days, acc is permanently deleted
    * appropriate error messages are returned 
    */
-  console.log('Wheres the logic my man?')
+  const id = request.params.id
+  try {
+    const connection = await pool.getConnection()
+    const [rows1,results1] = await pool.query(
+      `SELECT * FROM userBasicInfo WHERE id='${id}' AND isDeleted=0;`
+    )
+    const user = rows1 as Array<UsersBasicInfo>
+    console.log(user)
+    if (user){
+      const [rows2,results2] = await pool.query(
+        `UPDATE userBasicInfo SET
+        isDeactivated=1 WHERE id='${id}' AND isDeleted=0;`
+      )
+      return response.status(200).json({message:`You have successfuly deactivated your account. It will be permanently deleted in 7 days.`})
+    }
+    return response.status(400).json({error:`Oops!Looks like that user does not exist. Try again?`})
+    
+  } catch (error:sqlError | any) {
+    return response.status(500).json({error:`An error occured: `+error.sqlError})
+  }
+
 }
+
+
+// export async function reactivateAccount(request:Request,response:Response){
+//   /*
+//    * reactivates a users account
+//    * appropriate error messages are returned 
+//    */
+//   console.log('Wheres the logic my man?')
+// }
