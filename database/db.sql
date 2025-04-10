@@ -8,8 +8,10 @@ CREATE TABLE userBasicInfo(
     email VARCHAR(255) UNIQUE NOT NULL,
     phoneNumber VARCHAR(20) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    createdAt DATE DEFAULT (CURRENT_DATE),
+    lastUpdated DATE DEFAULT (CURRENT_DATE),
     isEmailVerified BOOLEAN DEFAULT 0,
+    isDeactivated BOOLEAN DEFAULT 0,
     isDeleted BOOLEAN DEFAULT 0
 );
 
@@ -19,9 +21,9 @@ CREATE UNIQUE INDEX emailIndex ON userBasicInfo(email);
 
 -- INSERT DUMMY DATA
 INSERT INTO userBasicInfo VALUES
-    (1,'admin','admin@gmail.com','0712345678','@Admin2025',DEFAULT,DEFAULT,DEFAULT),
-    (2,'user1','user1@gmail.com','0712345678','@User12025',DEFAULT,DEFAULT,DEFAULT),
-    (3,'user2','user2@gmail.com','0712345678','@User22025',DEFAULT,DEFAULT,DEFAULT)
+    (1,'admin','admin@gmail.com','0712345678','@Admin2025',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT),
+    (2,'user1','user1@gmail.com','0712345678','@User12025',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT),
+    (3,'user2','user2@gmail.com','0712345678','@User22025',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT)
 ;
 
 
@@ -35,7 +37,7 @@ CREATE TABLE userPersonalInfo(
     dob DATE NOT NULL,
     profilePic VARCHAR(255) NOT NULL,
     agreedToTos BOOLEAN DEFAULT 0,
-    lastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP,
+    lastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (userId) REFERENCES userBasicInfo(id)
 );
 
@@ -47,8 +49,9 @@ INSERT INTO userPersonalInfo VALUES
     (3,3,'female','2001-01-17','profiles/user2.jpeg',1,DEFAULT)
 ;
 
-
--- storedProcedures
+-------------------------
+--- storedProcedures ----
+-------------------------
 delimiter #
 
 -- addUser
@@ -136,24 +139,35 @@ END
 
 delimiter ;
 
-
--- triggers
+--------------------
+----- triggers -----
+--------------------
 delimiter #
 
--- trigger to automatically change lastUpdated column when one changes their dp
--- could be used for last seen and such
-CREATE TRIGGER lastProfileUpdate BEFORE UPDATE
-ON userPersonalInfo FOR EACH ROW
+-- trigger to automatically change lastUpdated column 
+-- ON UPDATE is not supported in CURRENT_DATE only CURRENT_TIMESTAMP
+CREATE TRIGGER lastBasicDataUpdate BEFORE UPDATE
+ON userBasicInfo FOR EACH ROW
 BEGIN
-    IF NEW.profilePic != OLD.profilePic
-     THEN SET NEW.lastUpdated = CURRENT_TIMESTAMP;
+    SET NEW.lastUpdated = CURRENT_DATE;
+END
+#
+
+-- to automatically change isDeleted columns once deactivate is on for >7days
+CREATE TRIGGER deleteAccount BEFORE UPDATE
+ON userBasicInfo FOR EACH ROW
+BEGIN
+    IF (DATEDIFF(CURRENT_DATE,OLD.lastUpdated) >= 7 AND OLD.isDeactivated=1) THEN
+        SET NEW.isDeleted = 1;
     END IF;
 END
 #
 
 delimiter ;
 
--- views
+----------------------
+------- views --------
+----------------------
 delimiter #
 -- view showing all verified emails
 CREATE VIEW verifiedUserEmails
