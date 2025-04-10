@@ -9,7 +9,7 @@ authRouter.post('/login',loginUser)
 authRouter.get('/get-all',getUsers)
 authRouter.get('/get-by-email',getUserByEmail)
 authRouter.patch('/update/:id',updateUser)
-authRouter.patch('/delete/:id',deactivateAccount)
+authRouter.patch('/deactivate/:id',deactivateAccount)
 
 
 export default authRouter
