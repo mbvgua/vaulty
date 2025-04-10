@@ -35,3 +35,11 @@ export interface UsersPersonalInfo {
     lastUpdated:string
 }
 
+export interface sqlError {
+    code:string,
+    errno:number,
+    sql:string,
+    sqlState:string,
+    sqlMessage:string,
+}
+
