@@ -1,6 +1,6 @@
 import { Router } from "express"
 
-import { deactivateAccount, getUserByEmail, getUsers, loginUser, registerUser, updateUser } from "./auth"
+import { deactivateAccount, getUserByEmail, getUsers, loginUser, registerUser, updateUser } from "../controllers/user-basic.controllers"
 
 const authRouter:Router = Router()
 
@@ -9,7 +9,7 @@ authRouter.post('/login',loginUser)
 authRouter.get('/get-all',getUsers)
 authRouter.get('/get-by-email',getUserByEmail)
 authRouter.patch('/update/:id',updateUser)
-authRouter.patch('/deactivate/:id',deactivateAccount)
+authRouter.put('/deactivate/:id',deactivateAccount)
 
 
 export default authRouter

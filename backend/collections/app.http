@@ -46,7 +46,7 @@ Content-Type: application/json
 
 ###############
 # deactivate account
-PATCH http://localhost:4000/auth/deactivate/dd62e609-bb27-4517-9917-fde01e055bd4
+PUT http://localhost:4000/auth/deactivate/dd62e609-bb27-4517-9917-fde01e055bd4
 
 #############
 # reactivate account

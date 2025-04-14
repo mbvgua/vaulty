@@ -2,7 +2,7 @@ import mysql from 'mysql2/promise'
 import dotenv from 'dotenv'
 import path from 'path'
 
-import { sqlConfiguration } from '../models'
+import { sqlConfiguration } from '../api-v1/models/user-basic.models'
 
 // dotenv.config() --DOES NOT WORK?!
 dotenv.config({path:path.resolve(__dirname,'../../.env')})
