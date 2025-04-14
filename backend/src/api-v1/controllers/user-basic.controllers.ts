@@ -2,9 +2,9 @@ import { Request,Response } from "express";
 import mysql from 'mysql2/promise'
 import {v4 as uid} from 'uuid'
 
-import { sqlConfig } from "./config";
-import { sqlConfiguration, sqlError, UsersBasicInfo } from "./models";
-import { registerSchema,loginEmailSchema,loginUsernameSchema, emailSchema, updateUserSchema } from "./validators";
+import { sqlConfig } from "../../config";
+import { sqlConfiguration, sqlError, UsersBasicInfo } from "../models/user-basic.models";
+import { registerSchema,loginEmailSchema,loginUsernameSchema, emailSchema, updateUserSchema } from "../validators/user-basic.validators";
 
 const pool = mysql.createPool(sqlConfig)
 
@@ -265,11 +265,3 @@ export async function deactivateAccount(request:Request<{id:string}>,response:Re
 
 }
 
-
-// export async function reactivateAccount(request:Request,response:Response){
-//   /*
-//    * reactivates a users account
-//    * appropriate error messages are returned 
-//    */
-//   console.log('Wheres the logic my man?')
-// }

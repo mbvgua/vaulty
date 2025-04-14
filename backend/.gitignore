@@ -6,3 +6,6 @@ node_modules/
 
 # can be recreated
 dist/
+
+# still in progress
+__tests__
