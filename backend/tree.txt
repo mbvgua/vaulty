@@ -1,0 +1,28 @@
+.
+├── collections
+│   └── app.http
+├── dist  [11 entries exceeds filelimit, not opening dir]
+├── node_modules  [200 entries exceeds filelimit, not opening dir]
+├── src
+│   ├── api-v1
+│   │   ├── controllers
+│   │   │   ├── user-details.controllers.ts
+│   │   │   └── users.controllers.ts
+│   │   ├── models
+│   │   │   ├── db.models.ts
+│   │   │   └── users.models.ts
+│   │   ├── routes
+│   │   │   └── users.routes.ts
+│   │   └── validators
+│   │       └── users.validators.ts
+│   ├── config
+│   │   └── index.ts
+│   ├── app.ts
+│   └── server.ts
+├── package.json
+├── package-lock.json
+├── tree
+├── tree.txt
+└── tsconfig.json
+
+11 directories, 15 files

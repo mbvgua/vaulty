@@ -19,6 +19,17 @@ Content-Type: application/json
     "password":"@Lancez2"
 }
 
+##############
+# add user details
+POST http://localhost:4000/auth/add-details
+Content-Type: application/json
+
+{
+    "gender":"male",
+    "dob":"1-1-2000",
+    "profilePic":"pic/lol.png",
+}
+
 ###############
 # get user by email
 GET http://localhost:4000/auth/get-by-email
@@ -41,7 +52,10 @@ Content-Type: application/json
     "username":"Ziggler",
     "email":"zig@gmail.com",
     "phoneNumber":"0712345678",
-    "password":"@Lancez23"
+    "password":"@Lancez23",
+    "gender":"male",
+    "dob":"1-1-2000",
+    "profilePic":"pic/lol.png"
 }
 
 ###############
@@ -50,3 +64,4 @@ PUT http://localhost:4000/auth/deactivate/dd62e609-bb27-4517-9917-fde01e055bd4
 
 #############
 # reactivate account
+PATCH http://localhost:4000/auth/reactivate/dd62e609-bb27-4517-9917-fde01e055bd4
