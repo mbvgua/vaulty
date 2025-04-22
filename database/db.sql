@@ -2,7 +2,7 @@ CREATE DATABASE vaulty;
 USE vaulty;
 
 -- create userBasicInfo table
-CREATE TABLE userBasicInfo(
+CREATE TABLE users(
     id VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -30,7 +30,7 @@ INSERT INTO userBasicInfo VALUES
 -- create userPersonalInfo table
     -- SAME AS id INT PRIMARY KEY NOT NULL AUTO_INCREMENT UNIQUE,
     -- gender CHAR(1) ENUM('male','female') --IS THIS POSSIBLE?
-CREATE TABLE userPersonalInfo(
+CREATE TABLE userDetails(
     id VARCHAR(255) PRIMARY KEY,
     userId VARCHAR(255) NOT NULL,
     gender ENUM('male','female','other') NOT NULL,

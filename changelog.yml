@@ -1,0 +1,165 @@
+commit 2b8d5fda88f6b5efc2576e83901d0c1556833ba1
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Mon Apr 14 16:42:17 2025 +0300
+
+    Modularize the application
+    
+    - refactored the api-v1 folder, moving each individual file into a
+      folder. This is in preparation for building the UserPersonalInfo
+      functionality that will be housed in similar location.
+    - separated the app.ts from the server.ts to allow for testing logic to
+      work
+
+commit 363fcd56d227fb2d19b91266ec0ad4f3d79affa7
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Thu Apr 10 22:50:49 2025 +0300
+
+    changed the logic to allow for various functionality
+
+commit b0f85dab6e75bcd3067892e960593e8f02c50843
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Thu Apr 10 22:43:56 2025 +0300
+
+    Touched abit on the UD operations
+    
+    - Might need to redo the update endpoint, for scenarios whereby not all
+      the values are present. It updated undefined values to the db, which
+    is not present. Might look for a way to resolve this by placing
+    placehholders in the frontend
+    
+    - rewrote both the userBasicInfo and UserPersonalInfo tables, creating a
+      way to delete accs. after a certain timespan
+    
+    - removed unecessary update trigger and in-built that into the tables
+      itself, however since it could not b possible with the CURRENT_DATE
+    data type, had to build a tigger to do that automatically
+    
+    - More errors continue to show up in the auth controllers, and there is
+      an evolving need to identify even more of them through testing and
+    resolve where possible
+
+commit 6da0f3fd9cc016f662336370fd5c7aa4633a3144
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Thu Apr 10 13:38:37 2025 +0300
+
+    did the CR operations on the database
+    
+    next phase will involve working on the update and deacticate(delete)
+    
+    some bugs were identified manually in the loginUser controller, whereby
+    if i were to input a username/email that does not exist, an error will
+    be caught instead of returnng that that user does not exist. Will look
+    on how to handle this while testing the application later on.
+    
+    Ofcourse the fragile premise being that i able to remember that ;(
+
+commit ca5265fdfdb9621d6d5ea115ed618693df2617c1
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Thu Apr 10 11:31:13 2025 +0300
+
+    build and implement logic for the login users table
+
+commit 73997f85a83185b46818ed1fd26a4efff5482571
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Wed Apr 9 13:33:26 2025 +0300
+
+    Used connection pools to query DB
+    
+    these help reduce time used in connecting to the db by using a previous
+    connection and leaving it open when done instead of closing it.
+
+commit 8369c281b937be92acca85e36e3ba2783e10147d
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Sun Apr 6 11:21:57 2025 +0300
+
+    Created the first endpoint!!(technically 2nd)
+    
+    Created the register user endpoint in the rather simple way with no
+    validation or authorization.
+    
+    Had to rewrite the database schema, in that the initial INT data type
+    associated with the id column had to truncate the long uuid generated
+    id. Converted this to VARCHAR(255) to house it without truncating it.
+    
+    build the routes and collections to help in eventual modularization of
+    the application.
+
+commit 52545b347964ee45ba0e9de323fef055e36d0ebe
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Sun Apr 6 09:40:25 2025 +0300
+
+    Connected to the database
+    
+    After various failed attempts I was successful in connecting my backend
+    to the MySql databse and perform a siple table query. The code is quite
+    messy and jumpled up but I intend to modularise it in the next update.
+
+commit 9dc857cf48c9bf3bf064ebea8055fd9101e8a96c
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Sat Apr 5 08:53:18 2025 +0300
+
+    GOT BASIC SERVER RUNNING
+    
+    got a very simple server endpoint up and running. It receives a response
+    and returns a response. Now to connect to the database...
+
+commit 9492764ed73cc431923e6c22df21ff5d66c245c1
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Fri Apr 4 23:14:24 2025 +0300
+
+    ADDED THE VIEWS!
+    
+    which wasn't quite as hard as i thought as they only virtual tables. The
+    functions proved abit difficult and thus were put off for a while. Was
+    able to bundle the entire db-schema into a script and execute it
+    seamlessly at one which was quite nice.
+    
+    Looking forward to begining work on the backend implemenattion tommorow.
+
+commit 8e1c88301cbb2b309e2116bdaf584c19215d1865
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Fri Apr 4 19:49:36 2025 +0300
+
+    GOT A TRIGGER WORKING!!!
+    
+    No chatgpt was used in the making of this trigger. Pure documentation
+    and mental fortitude. It was amazing, simple but amazing. Oh, and I also
+    got a bunch of storedProcedures up and running. They had a very similar
+    syntax to those from T-Sql, but not exactly.
+    
+    Also removed all 'IF NOT EXISTS' statements from the tables and stored procedures as they were made redundant in mysql v8.0.0 onwards.
+    
+    Anyway, day made!!!!
+
+commit c63bf8b011c193f526f8dfec10d349c234220f3b
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Thu Apr 3 12:00:59 2025 +0300
+
+    CREATE THE USER TABLES
+    
+    built two tables, userBasicInfo and userPersonalInfo and inputted some
+    dummy data.
+
+commit fbd0abfaab1423cac89bd494da6bd71ca5fb33ee
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Mon Mar 3 22:29:42 2025 +0300
+
+    get a basic express server running
+
+commit 5a74f6d3a1fec11d1bb6733bc4c6f1a325e086bc
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Sun Mar 2 22:29:22 2025 +0300
+
+    build a draft of a simplified database schema
+
+commit 7ce34a9651da6355f520273f2a944a9d45565942
+Author: mbvgua <mbuguadouglas17@gmail.com>
+Date:   Sat Mar 1 22:51:11 2025 +0300
+
+    create the basic project structure GUI and the READEME.md file
+
+commit 6655143fcdb617384ff359152e71b588dd595ee8
+Author: mbvgua <105845499+mbvgua@users.noreply.github.com>
+Date:   Sat Mar 1 22:53:54 2025 +0300
+
+    Initial commit
