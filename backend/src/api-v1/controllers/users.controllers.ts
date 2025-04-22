@@ -1,4 +1,4 @@
-import { NextFunction, Request,Response } from "express";
+import { Request,Response } from "express";
 import mysql from 'mysql2/promise'
 import {v4 as uid} from 'uuid'
 
@@ -22,39 +22,38 @@ export async function registerUser(request:Request,response:Response){
 
   const id = uid()
   const {username,email,phoneNumber,password} = request.body
-  const {error} = registerSchema.validate(request.body)
-
+  
   try {
+    const {error} = registerSchema.validate(request.body)
     if (error) {
-      return response.status(400).json(error)
-    } else {
-      const connection = await pool.getConnection()
-      const [rows1,fields1] = await connection.query(
-        `INSERT INTO userBasicInfo VALUES(
-        '${id}',
-        '${username}',
-        '${email}',
-        '${phoneNumber}',
-        '${password}',
-        DEFAULT,
-        DEFAULT,
-        0,
-        0,
-        0
-        );`
-      )  
-
-      const [rows2,fields2] = await connection.query(
-        `SELECT * FROM userBasicInfo
-        WHERE id='${id}' AND isDeleted=0;`
-      ) 
-      connection.release()
-
-      const User = rows2 as Array<Users>
-
-      return response.status(200).json({message:`Congratulations ${User[0].username}! You have successfully been registered on the system.`})
+      return response.status(400).json(error.details[0].message)
     }
+    const connection = await pool.getConnection()
+    const [rows1,fields1] = await connection.query(
+      `INSERT INTO users VALUES(
+      '${id}',
+      '${username}',
+      '${email}',
+      '${phoneNumber}',
+      '${password}',
+      DEFAULT,
+      DEFAULT,
+      0,
+      0,
+      0
+      );`
+    )  
 
+    const [rows2,fields2] = await connection.query(
+      `SELECT * FROM users
+      WHERE id='${id}' AND isDeleted=0;`
+    ) 
+    connection.release()
+
+    const User = rows2 as Array<Users>
+
+    return response.status(200).json({message:`Congratulations ${User[0].username}! You have successfully been registered on the system.`})
+    
   } catch (error:sqlError | any) {
     console.log(error)
     return response.status(500).json({error:`An error occurred: `+error.sqlMessage})
@@ -71,71 +70,65 @@ export async function loginUser(request:Request,response:Response){
 
     const {emailOrUsername,password} = request.body
     const emailRegex = /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/
-    const connection = await pool.getConnection()
-    // console.log(emailRegex.test(emailOrUsername))
-
+    
     try {
+      const connection = await pool.getConnection()
       if (emailRegex.test(emailOrUsername)) {
         // if email
         const {error} = loginEmailSchema.validate(request.body)
 
-        if (!error){
-          // if no error
-          const [rows,results] = await connection.query(
-            `SELECT * FROM userBasicInfo WHERE
-            email='${emailOrUsername}' AND isDeleted=0;`
-          )
-          const user = rows as Array<Users>
-          console.log(user[0])
-
-          if (user) {
-            // if user exists
-            if (user[0].password === password){
-              return response.status(200).json({message:`Welcome back ${user[0].username}!`})
-            }
-            return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
-          }
-          // if user doesnt exist
-          return response.status(400).json({error:`Oops! User does not exist. Try a different email/username?`})
+        if (error){
+          return response.status(400).json(error.details[0].message)
         }
-        // if error in validation schema
-        return response.status(400).json(error)
+        // if no error
+        const [rows,results] = await connection.query(
+          `SELECT * FROM users WHERE
+          email='${emailOrUsername}' AND isDeleted=0;`
+        )
+        const user = rows as Array<Users>
+        console.log(user[0])
+
+        if (user) {
+          // if user exists
+          if (user[0].password === password){
+            return response.status(200).json({message:`Welcome back ${user[0].username}!`})
+          }
+          return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
+        }
+        // if user doesnt exist
+        return response.status(400).json({error:`Oops! User does not exist. Try a different email/username?`})
         
       } else if (!emailRegex.test(emailOrUsername)){
         // if not email
         const {error} = loginUsernameSchema.validate(request.body)
-        if (!error){
-          // if no error
-          const [rows,results] = await connection.query(
-            `SELECT * FROM userBasicInfo WHERE
-            username='${emailOrUsername}' AND isDeleted=0;`
-          )
-          const user = rows as Array<Users>
-          console.log(user[0])
-
-          if (user) {
-            // if user exists
-            if (user[0].password === password){
-              return response.status(200).json({message:`Welcome back ${user[0].username}!`})
-            }
-            return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
-          } 
-          // if user doesnt exist
-          return response.status(400).json({error:`Oops! User does not exist. Try a different email/username?`})
-          
+        if (error){
+          // if error in validation schema
+          return response.status(400).json(error.details[0].message)
         }
-        // if error in validation schema
-        return response.status(400).json(error)
-        
+        // if no error
+        const [rows,results] = await connection.query(
+          `SELECT * FROM users WHERE
+          username='${emailOrUsername}' AND isDeleted=0;`
+        )
+        const user = rows as Array<Users>
+        console.log(user[0])
+
+        if (user) {
+          // if user exists
+          if (user[0].password === password){
+            return response.status(200).json({message:`Welcome back ${user[0].username}!`})
+          }
+          return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
+        } 
+        // if user doesnt exist
+        return response.status(400).json({error:`Oops! User does not exist. Try a different email/username?`})
+         
       } else {
-        // otherwise
         return response.status(400).json({error:`Invalid inputs. Please try again?`})
-      }
-      
+      }   
     } catch (error:sqlError | any) {
       return response.status(500).json({error:`An error occurred: `+error.sqlMessage})
     }
-    
 }
 
 
@@ -148,27 +141,26 @@ export async function addUserDetails(request:Request<{id:string}>,response:Respo
   try {
       const connection = await pool.getConnection()
       const { error } = userDetailsSchema.validate(request.body)
-      if(!error){
-          const [rows,fields] = await connection.query(
-              `INSERT INTO userDetails VALUES(
-              '${id}',
-              '${userId}',
-              '${gender}',
-              '${dob}',
-              '${profilePic}',
-              DEFAULT
-              );`
-          )
-          const userDetails = rows as Array<UserDetails>
-          console.log(userDetails)
-
-          return response.status(200).json({success:`Congratulations! You have succesfully updated your details.`})
-
+      if(error){
+        return response.status(400).json(error.details[0].message)        
       }
-      return response.status(400).json({error:error})
+      const [rows,fields] = await connection.query(
+          `INSERT INTO userDetails VALUES(
+          '${id}',
+          '${userId}',
+          '${gender}',
+          '${dob}',
+          '${profilePic}',
+          DEFAULT
+          );`
+      )
+      const userDetails = rows as Array<UserDetails>
+      console.log(userDetails)
+
+      return response.status(200).json({success:`Congratulations! You have succesfully updated your details.`})
       
   } catch (error:sqlError | any) {
-      return response.status(500).json({error:`An error occurred: `+error.sqlMessage})
+      return response.status(500).json({error:`An error occurred: `+errorsqlMessage})
       
   }
 }
@@ -184,13 +176,13 @@ export async function deactivateAccount(request:Request<{id:string}>,response:Re
   try {
     const connection = await pool.getConnection()
     const [rows1,results1] = await pool.query(
-      `SELECT * FROM userBasicInfo WHERE id='${id}' AND isDeleted=0;`
+      `SELECT * FROM users WHERE id='${id}' AND isDeleted=0;`
     )
     const user = rows1 as Array<Users>
     console.log(user)
     if (user){
       const [rows2,results2] = await pool.query(
-        `UPDATE userBasicInfo SET
+        `UPDATE users SET
         isDeactivated=1 WHERE id='${id}' AND isDeleted=0;`
       )
       return response.status(200).json({message:`You have successfuly deactivated your account. It will be permanently deleted in 7 days.`})
@@ -215,8 +207,11 @@ export async function reactivateAccount(request:Request<{id:string}>,response:Re
       isDeactivated=0 WHERE id='${id}';`
     )
     const user = rows as Array<Users>
-    console.log(user)
-    return response.status(200).json({success:`Congratulations ${user[0].username}! You have successfully reactivated your account.`})
+    if(user){
+      console.log(user)
+      return response.status(200).json({success:`Congratulations ${user[0].username}! You have successfully reactivated your account.`})
+    }
+    return response.status(400).json({error:'User not found!'})
     
   } catch (error:sqlError | any) {
     return response.status(500).json({error:'An error occurred: '+error.sqlError})

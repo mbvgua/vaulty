@@ -7,7 +7,7 @@ export interface Users {
     password:string,
     createdAt:string,
     isEmailVerified:string,
-    isDeleetd:string
+    isDeleted:string
 }
 
 export interface UserDetails {
@@ -17,6 +17,11 @@ export interface UserDetails {
     dob:string,
     profilePic:string,
     lastUpdated:string
+}
+
+export interface UserObject {
+    basic:Users,
+    details:UserDetails
 }
 
 

@@ -176,9 +176,9 @@ export const updateUserSchema = Joi.object({
         }),
     profilePic:Joi.string()
         .required()
-        .message(
-            'A profile picture is required',
-        )
+        .messages({
+            'any.required':'A profile picture is required'
+        })
 
 })
 
@@ -200,8 +200,7 @@ export const userDetailsSchema = Joi.object({
         }),
     profilePic:Joi.string()
         .required()
-        .message(
-            'A profile picture is required'
-        )
-
+        .messages({
+            'any.required':'A profile picture is required'
+        })
 })
