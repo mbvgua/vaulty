@@ -9,7 +9,8 @@ export interface sqlConfiguration{
     idleTimeout?: number,
     queueLimit?: number,
     enableKeepAlive?: boolean,
-    keepAliveInitialDelay?: number
+    keepAliveInitialDelay?: number,
+    multipleStatements:boolean
 }
 
 export interface sqlError {
