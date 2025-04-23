@@ -2,7 +2,7 @@ import mysql from 'mysql2/promise'
 import dotenv from 'dotenv'
 import path from 'path'
 
-import { sqlConfiguration } from '../api-v1/models/user-basic.models'
+import { sqlConfiguration } from '../api-v1/models/db.models'
 
 // dotenv.config() --DOES NOT WORK?!
 dotenv.config({path:path.resolve(__dirname,'../../.env')})
@@ -21,5 +21,6 @@ export const sqlConfig:sqlConfiguration = {
     idleTimeout: 60000, // idle connections timeout, in milliseconds, the default value 60000
     queueLimit: 0,
     enableKeepAlive: true,
-    keepAliveInitialDelay: 0
+    keepAliveInitialDelay: 0,
+    multipleStatements:true
 }
