@@ -1,8 +1,8 @@
 CREATE DATABASE vaulty;
 USE vaulty;
 
--- create userBasicInfo table
-CREATE TABLE userBasicInfo(
+-- create users table
+CREATE TABLE users(
     id VARCHAR(255) PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -16,42 +16,40 @@ CREATE TABLE userBasicInfo(
 );
 
 -- indexes
-CREATE UNIQUE INDEX usernameIndex ON userBasicInfo(username);
-CREATE UNIQUE INDEX emailIndex ON userBasicInfo(email);
+CREATE UNIQUE INDEX usernameIndex ON users(username);
+CREATE UNIQUE INDEX emailIndex ON users(email);
 
 -- INSERT DUMMY DATA
-INSERT INTO userBasicInfo VALUES
+INSERT INTO users VALUES
     (1,'admin','admin@gmail.com','0712345678','@Admin2025',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT),
     (2,'user1','user1@gmail.com','0712345678','@User12025',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT),
     (3,'user2','user2@gmail.com','0712345678','@User22025',DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT)
 ;
 
 
--- create userPersonalInfo table
+-- create userDetails table
     -- SAME AS id INT PRIMARY KEY NOT NULL AUTO_INCREMENT UNIQUE,
     -- gender CHAR(1) ENUM('male','female') --IS THIS POSSIBLE?
-CREATE TABLE userPersonalInfo(
+CREATE TABLE userDetails(
     id VARCHAR(255) PRIMARY KEY,
     userId VARCHAR(255) NOT NULL,
     gender ENUM('male','female','other') NOT NULL,
     dob DATE NOT NULL,
     profilePic VARCHAR(255) NOT NULL,
-    agreedToTos BOOLEAN DEFAULT 0,
     lastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES userBasicInfo(id)
+    FOREIGN KEY (userId) REFERENCES users(id)
 );
 
 
 -- INSERT DUMMY DATA
-INSERT INTO userPersonalInfo VALUES
-    (1,1,'male','1998-04-23','profiles/admin.jpeg',1,DEFAULT),
-    (2,2,'female','2000-07-03','profiles/user1.jpeg',1,DEFAULT),
-    (3,3,'female','2001-01-17','profiles/user2.jpeg',1,DEFAULT)
+INSERT INTO userDetails VALUES
+    (1,1,'male','1998-04-23','profiles/admin.jpeg',DEFAULT),
+    (2,2,'female','2000-07-03','profiles/user1.jpeg',DEFAULT),
+    (3,3,'female','2001-01-17','profiles/user2.jpeg',DEFAULT)
 ;
 
--------------------------
---- storedProcedures ----
--------------------------
+-- storedProcedures
+
 delimiter #
 
 -- addUser
@@ -62,7 +60,7 @@ CREATE PROCEDURE addUser(
     IN password VARCHAR(255)
 )
 BEGIN
-    INSERT INTO userBasicInfo(username,email,phoneNumber,password)
+    INSERT INTO users(username,email,phoneNumber,password)
     VALUES (@username,@email,@phoneNumber,@password);
 END
 #
@@ -72,7 +70,7 @@ CREATE PROCEDURE getUserById(
     IN id VARCHAR(255)
 )
 BEGIN
-    SELECT * FROM userBasicInfo
+    SELECT * FROM users
     WHERE id=@id
     AND isDeleted=0;
 END
@@ -83,7 +81,7 @@ CREATE PROCEDURE getUserByEmail(
     IN email VARCHAR(255)
 )
 BEGIN
-    SELECT * FROM userBasicInfo
+    SELECT * FROM users
     WHERE email=@email
     AND isDeleted=0;
 END
@@ -94,7 +92,7 @@ CREATE PROCEDURE getUserByUsername(
     IN username VARCHAR(255)
 )
 BEGIN
-    SELECT * FROM userBasicInfo
+    SELECT * FROM users
     WHERE username=@username
     AND isDeleted=0;
 END
@@ -103,7 +101,7 @@ END
 -- getUsers
 CREATE PROCEDURE getUsers()
 BEGIN
-    SELECT * FROM userBasicInfo
+    SELECT * FROM users
     WHERE isDeleted=0;
 END
 #
@@ -117,7 +115,7 @@ CREATE PROCEDURE updateUser(
     IN password VARCHAR(255)
 )
 BEGIN
-    UPDATE userBasicInfo
+    UPDATE users
     SET username=@username,email=@email,phoneNumber=@phoneNumber,password=@password
     WHERE id=@id
     AND isDeleted=0;
@@ -131,7 +129,7 @@ CREATE PROCEDURE deleteUser(
     IN id VARCHAR(255)
 )
 BEGIN
-    UPDATE userBasicInfo
+    UPDATE users
     SET isDeleted=1
     WHERE id=@id;
 END
@@ -139,15 +137,14 @@ END
 
 delimiter ;
 
---------------------
------ triggers -----
---------------------
+-- triggers
+
 delimiter #
 
 -- trigger to automatically change lastUpdated column 
 -- ON UPDATE is not supported in CURRENT_DATE only CURRENT_TIMESTAMP
 CREATE TRIGGER lastBasicDataUpdate BEFORE UPDATE
-ON userBasicInfo FOR EACH ROW
+ON users FOR EACH ROW
 BEGIN
     SET NEW.lastUpdated = CURRENT_DATE;
 END
@@ -155,7 +152,7 @@ END
 
 -- to automatically change isDeleted columns once deactivate is on for >7days
 CREATE TRIGGER deleteAccount BEFORE UPDATE
-ON userBasicInfo FOR EACH ROW
+ON users FOR EACH ROW
 BEGIN
     IF (DATEDIFF(CURRENT_DATE,OLD.lastUpdated) >= 7 AND OLD.isDeactivated=1) THEN
         SET NEW.isDeleted = 1;
@@ -165,36 +162,35 @@ END
 
 delimiter ;
 
-----------------------
-------- views --------
-----------------------
+-- views 
+
 delimiter #
 -- view showing all verified emails
 CREATE VIEW verifiedUserEmails
 AS
-    SELECT id,username,email FROM userBasicInfo
+    SELECT id,username,email FROM users
     WHERE isEmailVerified=1
     AND isDeleted=0;
 #
 
 CREATE VIEW deletedAccounts
 AS
-    SELECT id,username,email,phoneNumber FROM userBasicInfo 
+    SELECT id,username,email,phoneNumber FROM users 
     WHERE isDeleted=1;
 #
 
 CREATE VIEW genderBalance
 AS
     SELECT gender,COUNT(*) AS totals
-    FROM userPersonalInfo
+    FROM userDetails
     GROUP BY gender;
 #
 
 -- CREATE VIEW averageUserAge
 -- AS
---     SELECT userId,dob,CURR_DATE-dob AS age FROM userPersonalInfo
+--     SELECT userId,dob,CURR_DATE-dob AS age FROM userDetails
 --     WHERE userId={SELECT id,username,email 
---     FROM userBasicInfo
+--     FROM users
 --     WHERE isDeleted=0}
 -- #
 

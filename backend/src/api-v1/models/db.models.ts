@@ -1,4 +1,3 @@
-
 export interface sqlConfiguration{
     host:string,
     user?:string,
@@ -11,28 +10,7 @@ export interface sqlConfiguration{
     queueLimit?: number,
     enableKeepAlive?: boolean,
     keepAliveInitialDelay?: number,
-
-}
-
-export interface UsersBasicInfo {
-    id:number,
-    username:string,
-    email:string,
-    phoneNumber:string,
-    password:string,
-    createdAt:string,
-    isEmailVerified:string,
-    isDeleetd:string
-}
-
-export interface UsersPersonalInfo {
-    id:number,
-    userId:number,
-    gender:string,
-    dob:string,
-    profilePic:string,
-    agreedToTos:string,
-    lastUpdated:string
+    multipleStatements:boolean
 }
 
 export interface sqlError {
@@ -42,4 +20,3 @@ export interface sqlError {
     sqlState:string,
     sqlMessage:string,
 }
-
