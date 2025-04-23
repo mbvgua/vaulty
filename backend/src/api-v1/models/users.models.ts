@@ -1,10 +1,16 @@
 
+export enum UserRoles {
+    admin = 'admin',
+    user = 'user'
+}
+
 export interface Users {
     id:number,
     username:string,
     email:string,
     phoneNumber:string,
     password:string,
+    role:UserRoles,
     createdAt:string,
     isEmailVerified:string,
     isDeleted:string

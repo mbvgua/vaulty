@@ -4,7 +4,7 @@ import {v4 as uid} from 'uuid'
 
 import { sqlConfig } from "../../config";
 import { sqlError } from "../models/db.models";
-import { Users, UserDetails } from "../models/users.models";
+import { UserRoles, Users, UserDetails } from "../models/users.models";
 import { registerSchema,loginEmailSchema,loginUsernameSchema, emailSchema, updateUserSchema, userDetailsSchema } from "../validators/users.validators";
 
 const pool = mysql.createPool(sqlConfig)
@@ -21,6 +21,8 @@ export async function registerUser(request:Request,response:Response){
   */
 
   const id = uid()
+  // hardcoded to user, incase of new admin, add manually
+  const role = UserRoles.user
   const {username,email,phoneNumber,password} = request.body
   
   try {
@@ -36,6 +38,7 @@ export async function registerUser(request:Request,response:Response){
       '${email}',
       '${phoneNumber}',
       '${password}',
+      '${role}',
       DEFAULT,
       DEFAULT,
       0,
@@ -160,7 +163,7 @@ export async function addUserDetails(request:Request<{id:string}>,response:Respo
       return response.status(200).json({success:`Congratulations! You have succesfully updated your details.`})
       
   } catch (error:sqlError | any) {
-      return response.status(500).json({error:`An error occurred: `+errorsqlMessage})
+      return response.status(500).json({error:`An error occurred: `+error.sqlMessage})
       
   }
 }
