@@ -6,16 +6,21 @@ Simple application where I intend to create and master processes involved in the
 - **Backend**: MySql
 - **Package Manager**: npm
 
-Main concepts to take a deep dive on: 
-1. **User Roles & Permissions** - Implement role-based access control (RBAC) or permissions within your app. Using `casbin` (Node.js library for access control), or custom logic in the authentication middleware.
+Main concepts to take a deep dive on:
+- [x] **User Roles & Permissions** - Implement role-based access control (RBAC) or permissions within your app. Using `casbin` (Node.js library for access control), or custom logic in the authentication middleware.
 
-2. **Two-Factor Authentication (2FA)** - Add an additional layer of security by integrating two-factor authentication. Using libraries like `speakeasy` (for TOTP generation) or services like Authy, Google Authenticator, or Twilio for SMS-based verification.
+- [ ] **Password Reset Flow** - Add a password recovery option where users can request a reset link. Use `nodemailer` for sending password reset emails.
 
-3. **Password Reset Flow** - Add a password recovery option where users can request a reset link. Use `nodemailer` for sending password reset emails.
+- [ ] **Social Authentication** - Allow users to log in with third-party services like Google, Facebook, or GitHub. Using Passport.js with appropriate strategies (e.g., `passport-google-oauth`, `passport-facebook`).
 
-4. **Social Authentication** - Allow users to log in with third-party services like Google, Facebook, or GitHub. Using Passport.js with appropriate strategies (e.g., `passport-google-oauth`, `passport-facebook`).
+- [ ] **Two-Factor Authentication (2FA)** - Add an additional layer of security by integrating two-factor authentication. Using libraries like `speakeasy` (for TOTP generation) or services like Authy, Google Authenticator, or Twilio for SMS-based verification.
 
-5. **Session Management** - Manage how long a user can remain logged in without any activity, using session management libraries (e.g., `express-session`).
+- [ ] **Session Management** - Manage how long a user can remain logged in without any activity, using session management libraries (e.g., `express-session`).
+
+- [ ] **Testing** - Writing unit and integration tests for your authentication logic on both the frontend (Angular) and backend (Node.js). Useful for ensuring your security and authentication processes work correctly.
+
+- [ ] **Docker** - Containerization for applications.
+
 
 ---
 
@@ -49,21 +54,5 @@ Main concepts to take a deep dive on:
 8. **dotenv** - Safely manage sensitive data like database credentials, JWT secrets, etc.
 
 9. **cors** - Enable Cross-Origin Resource Sharing (CORS) in your API.
-
----
-
-### **Bonus Modules**
-
-1. **Jest** - Writing unit and integration tests for your authentication logic on both the frontend (Angular) and backend (Node.js). Useful for ensuring your security and authentication processes work correctly.
-
-2. **Docker** - Containerization for applications.
-
-<!-- 4. **Helmet.js**  
-   - **Purpose**: Security middleware for Express.
-   - **Use Case**: Adds security-related HTTP headers to your app to help prevent certain types of attacks, like cross-site scripting (XSS) or clickjacking. -->
-
-5. **Rate Limiting (express-rate-limit)**  - Prevent abuse by limiting the number of requests a user can make in a short period thus protecting your authentication endpoints (e.g., login or registration) from brute-force attacks.
-
-7. **Swagger/OpenAPI** - Automatically generate interactive API documentation for your backend, making it easier for frontend developers or external teams to integrate with your app.
 
 ---

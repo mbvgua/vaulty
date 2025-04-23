@@ -3,7 +3,7 @@ import mysql from 'mysql2/promise'
 
 import { sqlConfig } from "../../config"
 import { sqlError } from "../models/db.models"
-import { UserObject, Users } from "../models/users.models"
+import { UserObject, UserRoles, Users } from "../models/users.models"
 import { emailSchema, updateUserSchema } from "../validators/users.validators"
 
 const pool = mysql.createPool(sqlConfig)
@@ -11,32 +11,44 @@ const pool = mysql.createPool(sqlConfig)
 // getUserByParams
 
 // getUserByEmail
-export async function getUserByEmail(request:Request, response:Response){
+export async function getUserByEmail(request:Request<{id:string}>, response:Response){
   /*
    *get a specific user by email
    */
 
+   const id = request.params.id
    const {email} = request.body
    const emailRegex = /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/
-
+   
    try {
-    if (emailRegex.test(email)){
-      // if an actual email
-      const {error} = emailSchema.validate(request.body)
-      if(error){
+     if (emailRegex.test(email)){
+       // if an actual email
+       const {error} = emailSchema.validate(request.body)
+       if(error){
         return response.status(400).json(error.details[0].message)
       }
       const connection = await pool.getConnection()
-      const [rows,fields] = await pool.query(
-        `SELECT * FROM users WHERE
-        email='${email}' AND isDeleted=0;`
+      const [rows1,fields1] = await pool.query(
+        `SELECT * FROM users WHERE id='${id}' and isDeleted=0;`
       )
-      const user = rows as Array<Users>
-      if(user){
-        console.log(user[0])
-        return response.status(200).json(user[0])
+      const user = rows1 as Array<Users>
+
+      if (user[0].role === UserRoles.admin){
+        const [rows2,fields2] = await pool.query(
+          `SELECT * FROM users WHERE
+          email='${email}' AND isDeleted=0;`
+        )
+        const user = rows2 as Array<Users>
+    
+        if(user){
+          console.log(user[0])
+          return response.status(200).json(user[0])
+        }
+        return response.status(400).json({error:`Oops! Looks like that user does not exist, try again?`})
       }
-      return response.status(400).json({error:`Oops! Looks like that user does not exist, try again?`})
+      return response.status(400).json({error:`It looks like you do not have access to view this page. Contact your administrator`})
+
+
     }
     // if not an email
     return response.status(400).json({error:`Oops! That does not look like a valid email, try again?`})
@@ -47,25 +59,35 @@ export async function getUserByEmail(request:Request, response:Response){
 }
 
 // getUsers
-export async function getUsers(request:Request, response:Response){
+export async function getUsers(request:Request<{id:string}>, response:Response){
   /*
    * get all the user registered in the system who still have active accounts 
    * if none, appropriate error messages will be returned
    */
 
+  const id = request.params.id
+
   try {
     const connection = await pool.getConnection()
-    const [rows,fields] = await connection.query(
-      `SELECT * FROM users WHERE isDeleted=0;`
+    const [rows1,fields1] = await pool.query(
+      `SELECT * FROM users WHERE id='${id}' AND isDeleted=0;`
     )
-    const users = rows as Array<UserObject>
-    // console.log(users)
-
-    if (users){
-      return response.status(200).json(users)
+    const user = rows1 as Array<Users>
+    if(user[0].role === UserRoles.admin){
+      const [rows2,fields2] = await connection.query(
+        `SELECT * FROM users WHERE isDeleted=0;`
+      )
+      const users = rows2 as Array<UserObject>
+      // console.log(users)
+  
+      if (users){
+        return response.status(200).json(users)
+      }
+      // if no users in system
+      return response.status(500).json({error:`Oops! Looks like there are no users in the system. Give it some time champ :-)`})
     }
-    // if no users in system
-    return response.status(500).json({error:`Oops! Looks like there are no users in the system. Give it some time champ :-)`})
+    return response.status(400).json({error:'It looks like you do not have access to view this page. Contact your administrator'})
+
   } catch (error:sqlError | any) {
     return response.status(500).json({error:`An error occurred: `+error.sqlError})
   }

@@ -3,8 +3,8 @@ POST http://localhost:4000/auth/register
 Content-Type: application/json
 
 {
-    "username":"Lincolnqee",
-    "email":"linc17@gmail.com.ke.net",
+    "username":"Lancelot",
+    "email":"lancelot@gmail.com",
     "phoneNumber":"0712345678",
     "password":"@Lancez23"
 }
@@ -32,16 +32,16 @@ Content-Type: application/json
 
 ###############
 # get user by email
-GET http://localhost:4000/auth/get-by-email
+GET http://localhost:4000/auth/1/get-by-email
 Content-Type: application/json
 
 {
-    "email":"admin32@gmail.com"
+    "email":"lancelot@gmail.com"
 }
 
 ###############
 # get all users
-GET http://localhost:4000/auth/get-all
+GET http://localhost:4000/auth/1/get-all
 
 ###############
 # update users
