@@ -1,6 +1,7 @@
 import { Request,Response } from "express";
 import mysql from 'mysql2/promise'
 import {v4 as uid} from 'uuid'
+import bcrypt from 'bcrypt'
 
 import { sqlConfig } from "../../config";
 import { sqlError } from "../models/db.models";
@@ -30,6 +31,9 @@ export async function registerUser(request:Request,response:Response){
     if (error) {
       return response.status(400).json(error.details[0].message)
     }
+    const saltRounds = 10
+    const hashedPassword =await bcrypt.hash(password,saltRounds)
+    
     const connection = await pool.getConnection()
     const [rows1,fields1] = await connection.query(
       `INSERT INTO users VALUES(
@@ -37,7 +41,7 @@ export async function registerUser(request:Request,response:Response){
       '${username}',
       '${email}',
       '${phoneNumber}',
-      '${password}',
+      '${hashedPassword}',
       '${role}',
       DEFAULT,
       DEFAULT,
@@ -93,7 +97,8 @@ export async function loginUser(request:Request,response:Response){
 
         if (user) {
           // if user exists
-          if (user[0].password === password){
+          const validPassword = await bcrypt.compare(password,user[0].hashedPassword)
+          if (validPassword){
             return response.status(200).json({message:`Welcome back ${user[0].username}!`})
           }
           return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
@@ -118,7 +123,8 @@ export async function loginUser(request:Request,response:Response){
 
         if (user) {
           // if user exists
-          if (user[0].password === password){
+          const validPassword = await bcrypt.compare(password,user[0].hashedPassword)
+          if (validPassword){
             return response.status(200).json({message:`Welcome back ${user[0].username}!`})
           }
           return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
