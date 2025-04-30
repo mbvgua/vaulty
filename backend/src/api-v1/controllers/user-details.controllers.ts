@@ -1,5 +1,6 @@
 import { Request,Response } from "express"
 import mysql from 'mysql2/promise'
+import bcrypt from 'bcrypt'
 
 import { sqlConfig } from "../../config"
 import { sqlError } from "../models/db.models"
@@ -118,12 +119,15 @@ export async function updateUser(request:Request<{id:string}>,response:Response)
   const user = rows as Array<Users>
   if (user){          
     // update data accordingly
+    const saltRounds = 10
+    const hashedPassword = await bcrypt.hash(password,saltRounds)
+
     const [rows2,fields2] = await pool.query(
       `
       UPDATE users SET 
       username='${username}',
       email='${email}',
-      password='${password}',
+      hashedPassword='${hashedPassword}',
       phoneNumber='${phoneNumber}'
       WHERE id='${user[0].id}' AND isDeleted=0;
 
