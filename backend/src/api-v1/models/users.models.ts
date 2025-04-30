@@ -9,10 +9,11 @@ export interface Users {
     username:string,
     email:string,
     phoneNumber:string,
-    password:string,
+    hashedPassword:string,
     role:UserRoles,
     createdAt:string,
     isEmailVerified:string,
+    isDeactivated:string,
     isDeleted:string
 }
 

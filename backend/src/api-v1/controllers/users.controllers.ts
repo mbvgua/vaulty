@@ -98,10 +98,18 @@ export async function loginUser(request:Request,response:Response){
         if (user) {
           // if user exists
           const validPassword = await bcrypt.compare(password,user[0].hashedPassword)
-          if (validPassword){
-            return response.status(200).json({message:`Welcome back ${user[0].username}!`})
+          
+          if(+user[0].isDeactivated===1){
+            const [rows,fields] = await connection.query(
+              `UPDATE users SET isDeactivated=0 WHERE id='${user[0].id}';`
+            )
+            return response.status(200).json({messages:`You have successfully reactivated your account. Welcome back!`})
           }
-          return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
+          else if (validPassword){
+            return response.status(200).json({message:`Welcome back ${user[0].username}!`})
+          } else {
+            return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
+          }
         }
         // if user doesnt exist
         return response.status(400).json({error:`Oops! User does not exist. Try a different email/username?`})
@@ -124,10 +132,17 @@ export async function loginUser(request:Request,response:Response){
         if (user) {
           // if user exists
           const validPassword = await bcrypt.compare(password,user[0].hashedPassword)
-          if (validPassword){
+
+          if(+user[0].isDeactivated===1){
+            const [rows,fields] = await connection.query(
+              `UPDATE users SET isDeactivated=0 WHERE id='${user[0].id}';`
+            )
+            return response.status(200).json({messages:`You have successfully reactivated your account. Welcome back!`})
+          } else if (validPassword){
             return response.status(200).json({message:`Welcome back ${user[0].username}!`})
+          } else {
+            return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
           }
-          return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
         } 
         // if user doesnt exist
         return response.status(400).json({error:`Oops! User does not exist. Try a different email/username?`})
@@ -182,6 +197,7 @@ export async function deactivateAccount(request:Request<{id:string}>,response:Re
    * appropriate error messages are returned 
    */
   const id = request.params.id
+  const { password } = request.body
   try {
     const connection = await pool.getConnection()
     const [rows1,results1] = await pool.query(
@@ -189,12 +205,16 @@ export async function deactivateAccount(request:Request<{id:string}>,response:Re
     )
     const user = rows1 as Array<Users>
     console.log(user)
-    if (user){
-      const [rows2,results2] = await pool.query(
-        `UPDATE users SET
-        isDeactivated=1 WHERE id='${id}' AND isDeleted=0;`
-      )
-      return response.status(200).json({message:`You have successfuly deactivated your account. It will be permanently deleted in 7 days.`})
+    if (user[0]){
+      const validPassword = await bcrypt.compare(password, user[0].hashedPassword)
+      console.log(`pass bool: ${validPassword}`)
+      if (validPassword) {
+        const [rows2,results2] = await pool.query(
+          `UPDATE users SET isDeactivated=1 WHERE id='${id}' AND isDeleted=0;`
+        )
+        return response.status(200).json({message:`You have successfully deactivated your account. It will be permanently deleted in 7 days.`})
+      }
+      return response.status(400).json({message:`Oh no! Looks like the passwords do not match. Try again?`})
     }
     return response.status(400).json({error:`Oops!Looks like that user does not exist. Try again?`})
     
@@ -203,27 +223,3 @@ export async function deactivateAccount(request:Request<{id:string}>,response:Re
   }
 
 }
-
-
-// reactivateAccount
-export async function reactivateAccount(request:Request<{id:string}>,response:Response){
-  
-  const id = request.params.id
-  try {
-    const connection = await pool.getConnection()
-    const [rows,fields] = await connection.query(
-      `UPDATE users SET
-      isDeactivated=0 WHERE id='${id}';`
-    )
-    const user = rows as Array<Users>
-    if(user){
-      console.log(user)
-      return response.status(200).json({success:`Congratulations ${user[0].username}! You have successfully reactivated your account.`})
-    }
-    return response.status(400).json({error:'User not found!'})
-    
-  } catch (error:sqlError | any) {
-    return response.status(500).json({error:'An error occurred: '+error.sqlError})
-  }
-}
-
