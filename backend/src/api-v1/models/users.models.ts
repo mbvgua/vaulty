@@ -1,7 +1,16 @@
+import { Request } from "express"
+
 
 export enum UserRoles {
     admin = 'admin',
     user = 'user'
+}
+
+export interface UserPayload {
+    id:number,
+    username:string,
+    email:string,
+    role:UserRoles
 }
 
 export interface Users {
@@ -29,6 +38,10 @@ export interface UserDetails {
 export interface UserObject {
     basic:Users,
     details:UserDetails
+}
+
+export interface TokenRequest extends Request {
+    data?:UserPayload
 }
 
 
