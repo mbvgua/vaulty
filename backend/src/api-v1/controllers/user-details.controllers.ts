@@ -149,3 +149,74 @@ export async function updateUser(request:Request<{id:string}>,response:Response)
   return response.status(500).json({error:`An error occured: `+error.sqlMessage})
  }
 }
+
+export async function deleteAccount(request:Request<{id:string}>, response:Response){
+  /**
+   * delete user accounts, either by username or email.
+   * only to be used by the admin
+   */
+
+  const id = request.params.id
+  const {emailOrUsername} = request.body
+  const emailRegex = /^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/
+
+  try {
+    const connection = await pool.getConnection()
+
+    const [rows1,fields] = await connection.query(`
+      SELECT * FROM users WHERE id='${id}' AND isDeleted=0;`
+    )
+    const user = rows1 as Array<Users>
+
+    if(user[0] && user[0].role==='admin'){
+      // if admin, delete
+      if (emailRegex.test(emailOrUsername)){
+        // if it is an email
+        const {error} = emailSchema.validate(request.body)
+  
+        if (error){
+          return response.status(400).json({error:error.details[0].message})
+        }
+        const [rows2,fields2] = await connection.query(
+          `SELECT * FROM users WHERE email='${emailOrUsername}' AND isDeleted=0;`
+        )
+        const deletedUser = rows2 as Array<Users>
+        if (deletedUser[0] && +deletedUser[0].isDeleted===0){
+          // if user to be deleted exists
+          const [rows3,fields3] = await connection.query(
+            `UPDATE users SET isDeleted=1 WHERE email='${emailOrUsername}';`
+          )
+          return response.status(200).json({message:`You have successfully deleted ${deletedUser[0].username}'s account!`})
+
+        }
+        // if user to be deleted doesnt exist
+        return response.status(400).json({error:`Oops!Looks like the user has already been deleted or does not exist, try again?`})
+      } else {
+        // if not an email
+        const [rows2,fields2] = await connection.query(
+          `SELECT * FROM users WHERE username='${emailOrUsername}' AND isDeleted=0;`
+        )
+        const deletedUser = rows2 as Array<Users>
+
+        if (deletedUser[0] && +deletedUser[0].isDeleted===0){
+          // if user to be deleted exists
+          const [rows3,fields3] = await connection.query(
+            `UPDATE users SET isDeleted=1 WHERE username='${emailOrUsername}';`
+          )
+          return response.status(200).json({message:`You have successfully deleted ${deletedUser[0].username}'s account!`})
+
+        }
+        // if user to be deleted doesnt exist
+        return response.status(400).json({error:`Oops!Looks like the user has already been deleted or does not exist, try again?`})
+
+      }
+    }
+    // if not an admin, no auth
+    return response.status(400).json({error:`Oh no! It seems like you do not have priviledges to perform this operation, contact your admin for support.`})
+
+    
+  } catch (error:sqlError | any) {
+    return response.status(500).json({error:`An error occurred: `+error})
+    
+  }
+}

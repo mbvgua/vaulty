@@ -3,10 +3,10 @@ POST http://localhost:4000/auth/register
 Content-Type: application/json
 
 {
-    "username":"Lancelot",
-    "email":"lancelot@gmail.com",
+    "username":"Mathers",
+    "email":"mather@gmail.com",
     "phoneNumber":"0712345678",
-    "password":"@Lancez23"
+    "password":"Mathers47!"
 }
 
 ##############
@@ -15,8 +15,8 @@ POST http://localhost:4000/auth/login
 Content-Type: application/json
 
 {
-    "emailOrUsername":"linc17@gmail.com.ke.net",
-    "password":"@Lancez23"
+    "emailOrUsername":"marshall@gmail.com",
+    "password":"Mathers47!"
 }
 
 ##############
@@ -45,12 +45,12 @@ GET http://localhost:4000/auth/1/get-all
 
 ###############
 # update users
-PATCH http://localhost:4000/auth/update/2
+PATCH http://localhost:4000/auth/update/1
 Content-Type: application/json
 
 {
-    "username":"Ziggler",
-    "email":"zig@gmail.net",
+    "username":"admin",
+    "email":"admin@gmail.net",
     "phoneNumber":"0712345678",
     "password":"@Lancez23",
     "gender":"male",
@@ -60,8 +60,18 @@ Content-Type: application/json
 
 ###############
 # deactivate account
-PUT http://localhost:4000/auth/deactivate/dd62e609-bb27-4517-9917-fde01e055bd4
+PUT http://localhost:4000/auth/deactivate/2ac93804-718c-417e-89d3-0e565dd073db
+Content-Type: application/json
+
+{
+    "password":"Mathers47!"
+}
 
 #############
-# reactivate account
-PATCH http://localhost:4000/auth/reactivate/dd62e609-bb27-4517-9917-fde01e055bd4
+# delete account
+DELETE http://localhost:4000/auth/1/delete
+Content-type: application/json
+
+{
+    "emailOrUsername":"Mathers"
+}
