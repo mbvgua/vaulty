@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt'
 import { sqlConfig } from "../../config"
 import { sqlError } from "../models/db.models"
 import { UserObject, UserRoles, Users } from "../models/users.models"
-import { emailSchema, updateUserSchema } from "../validators/users.validators"
+import { deleteUserByEmailSchema, deleteUserByUsernameSchema, emailSchema, updateUserSchema } from "../validators/users.validators"
 
 const pool = mysql.createPool(sqlConfig)
 
@@ -172,7 +172,7 @@ export async function deleteAccount(request:Request<{id:string}>, response:Respo
       // if admin, delete
       if (emailRegex.test(emailOrUsername)){
         // if it is an email
-        const {error} = emailSchema.validate(request.body)
+        const {error} = deleteUserByEmailSchema.validate(request.body)
   
         if (error){
           return response.status(400).json({error:error.details[0].message})
@@ -193,6 +193,11 @@ export async function deleteAccount(request:Request<{id:string}>, response:Respo
         return response.status(400).json({error:`Oops!Looks like the user has already been deleted or does not exist, try again?`})
       } else {
         // if not an email
+        const {error} = deleteUserByUsernameSchema.validate(request.body)
+  
+        if (error){
+          return response.status(400).json({error:error.details[0].message})
+        }
         const [rows2,fields2] = await connection.query(
           `SELECT * FROM users WHERE username='${emailOrUsername}' AND isDeleted=0;`
         )

@@ -204,3 +204,39 @@ export const userDetailsSchema = Joi.object({
             'any.required':'A profile picture is required'
         })
 })
+
+
+export const deleteUserByEmailSchema = Joi.object({
+    emailOrUsername:Joi.string()
+        .required()
+        .email({
+            minDomainSegments:2,
+            tlds:{
+                allow:['com','net','ke']
+            }
+        })
+        .messages({
+            'string.base':'Email must be a string',
+            'any.required':'Email is required',
+            'string.email':'Email can only have two domains, e.g example.com whose tlds can either be ".com", ".net" or ".ke"'
+        })
+})
+
+export const deleteUserByUsernameSchema = Joi.object({
+    emailOrUsername:Joi.string()
+        .required()
+        .alphanum()
+        .lowercase()
+        .trim()
+        .min(3)
+        .max(20)
+        .messages({
+            'string.base':'Username must be a string',
+            'any.required':'Username is required',
+            'string.alphanum':'Username can only contain letters(a-z) and digits(0-9)',
+            'string.lowercase':'Username can only be in lowercase letters',
+            'string.trim':'Username cannot contain any whitespace before or after it',
+            'string.min':'Username should have a minimum length of {#length} characters',
+            'string.max':'Username shoulf have a maximum length of {#length} characters'
+        }),
+})

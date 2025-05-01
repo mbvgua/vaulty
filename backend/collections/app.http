@@ -3,10 +3,10 @@ POST http://localhost:4000/auth/register
 Content-Type: application/json
 
 {
-    "username":"Mathers",
-    "email":"mather@gmail.com",
+    "username":"Admin2",
+    "email":"admin2@gmail.com",
     "phoneNumber":"0712345678",
-    "password":"Mathers47!"
+    "password":"@Lance25"
 }
 
 ##############
@@ -15,8 +15,8 @@ POST http://localhost:4000/auth/login
 Content-Type: application/json
 
 {
-    "emailOrUsername":"marshall@gmail.com",
-    "password":"Mathers47!"
+    "emailOrUsername":"admin2@gmail.com",
+    "password":"@Lance25"
 }
 
 ##############
@@ -42,6 +42,7 @@ Content-Type: application/json
 ###############
 # get all users
 GET http://localhost:4000/auth/1/get-all
+token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkOTQwOGEyLWMwMmQtNGM4My04N2M4LTRkMzhlMjMzZWRiYyIsInVzZXJuYW1lIjoiQWRtaW4yIiwiZW1haWwiOiJhZG1pbjJAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ2MTA4MjAzLCJleHAiOjE3NDYxMTE4MDN9._1Y93xKXusRvvpL9xH--1Kd9BHu1bHIsWoSbsZddTGs
 
 ###############
 # update users
@@ -71,7 +72,8 @@ Content-Type: application/json
 # delete account
 DELETE http://localhost:4000/auth/1/delete
 Content-type: application/json
+token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkOTQwOGEyLWMwMmQtNGM4My04N2M4LTRkMzhlMjMzZWRiYyIsInVzZXJuYW1lIjoiQWRtaW4yIiwiZW1haWwiOiJhZG1pbjJAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ2MTA4MjAzLCJleHAiOjE3NDYxMTE4MDN9._1Y93xKXusRvvpL9xH--1Kd9BHu1bHIsWoSbsZddTGs
 
 {
-    "emailOrUsername":"Mathers"
+    "emailOrUsername":"cnatmcafee@gmail.com"
 }

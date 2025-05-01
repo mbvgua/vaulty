@@ -2,12 +2,15 @@ import { Request,Response } from "express";
 import mysql from 'mysql2/promise'
 import {v4 as uid} from 'uuid'
 import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
 
 import { sqlConfig } from "../../config";
 import { sqlError } from "../models/db.models";
-import { UserRoles, Users, UserDetails } from "../models/users.models";
+import { UserRoles, Users, UserDetails, UserPayload } from "../models/users.models";
 import { registerSchema,loginEmailSchema,loginUsernameSchema, emailSchema, updateUserSchema, userDetailsSchema } from "../validators/users.validators";
 
+dotenv.config()
 const pool = mysql.createPool(sqlConfig)
 
 
@@ -95,6 +98,18 @@ export async function loginUser(request:Request,response:Response){
         const user = rows as Array<Users>
         console.log(user[0])
 
+        // configure the user token
+        const payload:UserPayload = {
+          id:user[0].id,
+          username:user[0].username,
+          email:user[0].email,
+          role:user[0].role
+        }
+        const token = jwt.sign(payload,
+                              process.env.SECRET as string,
+                              {expiresIn:'1h'} )
+
+
         if (user) {
           // if user exists
           const validPassword = await bcrypt.compare(password,user[0].hashedPassword)
@@ -103,10 +118,10 @@ export async function loginUser(request:Request,response:Response){
             const [rows,fields] = await connection.query(
               `UPDATE users SET isDeactivated=0 WHERE id='${user[0].id}';`
             )
-            return response.status(200).json({messages:`You have successfully reactivated your account. Welcome back!`})
+            return response.status(200).json({messages:`You have successfully reactivated your account. Welcome back!`,token:token})
           }
           else if (validPassword){
-            return response.status(200).json({message:`Welcome back ${user[0].username}!`})
+            return response.status(200).json({message:`Welcome back ${user[0].username}!`,token:token})
           } else {
             return response.status(400).json({error:`Oh no. Looks like the passwords do not match, try again?`})
           }
