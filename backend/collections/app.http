@@ -3,10 +3,10 @@ POST http://localhost:4000/auth/register
 Content-Type: application/json
 
 {
-    "username":"Lincolnqee",
-    "email":"linc17@gmail.com.ke.net",
+    "username":"Admin2",
+    "email":"admin2@gmail.com",
     "phoneNumber":"0712345678",
-    "password":"@Lancez23"
+    "password":"@Lance25"
 }
 
 ##############
@@ -15,8 +15,8 @@ POST http://localhost:4000/auth/login
 Content-Type: application/json
 
 {
-    "emailOrUsername":"linc17@gmail.com.ke.net",
-    "password":"@Lancez23"
+    "emailOrUsername":"admin2@gmail.com",
+    "password":"@Lance25"
 }
 
 ##############
@@ -32,25 +32,26 @@ Content-Type: application/json
 
 ###############
 # get user by email
-GET http://localhost:4000/auth/get-by-email
+GET http://localhost:4000/auth/1/get-by-email
 Content-Type: application/json
 
 {
-    "email":"admin32@gmail.com"
+    "email":"lancelot@gmail.com"
 }
 
 ###############
 # get all users
-GET http://localhost:4000/auth/get-all
+GET http://localhost:4000/auth/1/get-all
+token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkOTQwOGEyLWMwMmQtNGM4My04N2M4LTRkMzhlMjMzZWRiYyIsInVzZXJuYW1lIjoiQWRtaW4yIiwiZW1haWwiOiJhZG1pbjJAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ2MTA4MjAzLCJleHAiOjE3NDYxMTE4MDN9._1Y93xKXusRvvpL9xH--1Kd9BHu1bHIsWoSbsZddTGs
 
 ###############
 # update users
-PATCH http://localhost:4000/auth/update/2
+PATCH http://localhost:4000/auth/update/1
 Content-Type: application/json
 
 {
-    "username":"Ziggler",
-    "email":"zig@gmail.net",
+    "username":"admin",
+    "email":"admin@gmail.net",
     "phoneNumber":"0712345678",
     "password":"@Lancez23",
     "gender":"male",
@@ -60,8 +61,19 @@ Content-Type: application/json
 
 ###############
 # deactivate account
-PUT http://localhost:4000/auth/deactivate/dd62e609-bb27-4517-9917-fde01e055bd4
+PUT http://localhost:4000/auth/deactivate/2ac93804-718c-417e-89d3-0e565dd073db
+Content-Type: application/json
+
+{
+    "password":"Mathers47!"
+}
 
 #############
-# reactivate account
-PATCH http://localhost:4000/auth/reactivate/dd62e609-bb27-4517-9917-fde01e055bd4
+# delete account
+DELETE http://localhost:4000/auth/1/delete
+Content-type: application/json
+token:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkOTQwOGEyLWMwMmQtNGM4My04N2M4LTRkMzhlMjMzZWRiYyIsInVzZXJuYW1lIjoiQWRtaW4yIiwiZW1haWwiOiJhZG1pbjJAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzQ2MTA4MjAzLCJleHAiOjE3NDYxMTE4MDN9._1Y93xKXusRvvpL9xH--1Kd9BHu1bHIsWoSbsZddTGs
+
+{
+    "emailOrUsername":"cnatmcafee@gmail.com"
+}
