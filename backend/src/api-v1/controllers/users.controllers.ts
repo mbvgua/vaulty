@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import mysql from 'mysql2/promise'
+import mysql from 'mysql2/promise' 
 import {v4 as uid} from 'uuid'
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"
@@ -24,7 +24,7 @@ export async function registerUser(request:Request,response:Response){
   * appropriate response message and codes are sent back
   */
 
-  const id = uid()
+  const id = uid() 
   // hardcoded to user, incase of new admin, add manually
   const role = UserRoles.user
   const {username,email,phoneNumber,password} = request.body
