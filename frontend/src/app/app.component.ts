@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NavbarComponent } from './navbar/navbar.component';
+import { SigninComponent } from "./components/signin/signin.component";
+import { NavbarComponent } from "./components/navbar/navbar.component";
+import { SignupComponent } from "./components/signup/signup.component";
+
 
 @Component({
   selector: 'app-root',
@@ -8,6 +11,8 @@ import { NavbarComponent } from './navbar/navbar.component';
   imports: [
     RouterOutlet,
     NavbarComponent,
+    SigninComponent,
+    SignupComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
