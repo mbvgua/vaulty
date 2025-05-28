@@ -47,13 +47,15 @@ Being a learning project, I aim to follow the rules outlined in the SDLC(Softwar
 
 ## Tech Stack
 
-Database: MySql
+Database: MySql, SQLite3
+
 Frontend: Angular, Jinja2
+
 Backend: Node.Js, Express, Flask
 
 ## Motivation
 
-Initially, this began as an learning project, more so aimed at the authentiaction process. I wanted to grasp concepts such as 2FA and social authentication. Along the way, another idea to built a chicken app hit me and instead of retiring the what I was working on the ever growing list of side project I never complete,I decided to merge both projects into one and this is it.
+Initially, this began as an learning project, more so aimed at the authentication process. I wanted to grasp concepts such as 2FA and social authentication. Along the way, another idea to built a chicken app hit me and instead of retiring the what I was working on the ever growing list of side project I never complete,I decided to merge both projects into one and this is it.
 I aim to keep it small and not overcomplicate it architecture as much as I can while also having fun in the process.
 Deployment would be a major plus, but we'll cross that bridge when we get there.
 
