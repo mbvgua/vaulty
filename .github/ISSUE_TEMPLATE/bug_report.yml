@@ -1,0 +1,38 @@
+name: 🐛Bug Report
+description: File a bug report.
+title: "[BUG]: "
+labels: ["bug"]
+assignees:
+  - mbvgua
+body: 
+  - type: markdown
+    attributes: 
+      values: |
+        Thanks for taking the time to file this bug report.
+        Kindly ensure that they're are no opened/closed issues for this topic.
+  - type: textarea
+    id: bug-description
+    attributes: 
+      label: Description of the bug
+      description: Give us a brief description of what happened and what should have happened
+      validations: 
+        required: true
+  - type: textarea
+    id: steps to reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: How do you trigger this bug? Please walk us through it step by step.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+        4. Error appears when '...'
+      validations:
+        required: true
+  - type: textarea
+    id: additional-information
+    attributes:
+      label: Additional Information
+      description: |
+        Provide any additional information that you think might be useful.
+        This can include logs, screenshots or scenarios in which the bug occurrs to facilitate easier resolving of the issue.   
