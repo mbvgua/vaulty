@@ -1,5 +1,3 @@
--- schema for tables in vaulty
-
 -- create and use the database
 CREATE DATABASE vaulty;
 USE vaulty;
@@ -19,6 +17,11 @@ CREATE TABLE users (
     is_deleted BOOLEAN DEFAULT 0
 );
 
+-- indexes
+CREATE INDEX username_index ON users(username);
+CREATE INDEX email_index ON users(email);
+CREATE INDEX role_index ON users(role);
+
 -- birds table
 CREATE TABLE birds (
     id VARCHAR(255) PRIMARY KEY,
@@ -29,17 +32,25 @@ CREATE TABLE birds (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- indexes
+CREATE INDEX bird_type_index ON birds(bird_type);
+
 -- coops table
 CREATE TABLE coops(
     id VARCHAR(255) PRIMARY KEY,
     user_id VARCHAR(255),
     bird_id VARCHAR(255),
+    coop_name VARCHAR(100) NOT NULL,
+    coop_details JSON,
     is_deleted BOOLEAN DEFAULT 0,
     created_at DATE DEFAULT(CURRENT_DATE),
     last_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (bird_id) REFERENCES birds(id)
 );
+
+-- indexes
+CREATE INDEX coop_name_index ON coops(coop_name);
 
 -- expenses table
 CREATE TABLE expenses (
@@ -49,11 +60,15 @@ CREATE TABLE expenses (
     category ENUM('health','feeds','equipment','labour','other') NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
     description TEXT,
+    is_deleted BOOLEAN DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    lastUpdated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    last_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (coop_id) REFERENCES coops(id)
 );
+
+-- indexes
+CREATE INDEX category_index ON expenses(category);
 
 -- feeds table
 CREATE TABLE feeds (
@@ -62,8 +77,13 @@ CREATE TABLE feeds (
     expense_id VARCHAR(255),
     feed_type ENUM('starter','grower','layer','broiler') NOT NULL,
     quantity DECIMAL(10,2) NOT NULL,
+    is_deleted BOOLEAN DEFAULT 0,
     acquired_on DATE DEFAULT(CURRENT_DATE),
     estimated_finish DATE DEFAULT(CURRENT_DATE),
     FOREIGN KEY (coop_id) REFERENCES coops(id),
     FOREIGN KEY (expense_id) REFERENCES expenses(id)
 );
+
+-- indexes
+CREATE INDEX feed_type_index ON feeds(feed_type);
+CREATE INDEX acquired_on_index ON feeds(acquired_on);
