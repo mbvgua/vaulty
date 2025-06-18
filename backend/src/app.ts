@@ -1,13 +1,12 @@
-import express,{json} from 'express'
-import dotenv from 'dotenv'
-import authRouter from './api-v1/routes/users.routes'
+import express, { json } from "express";
+import dotenv from "dotenv";
+import authRouter from "./api-v1/routes/users.routes";
 
-dotenv.config()
+dotenv.config();
 
-const app = express()
+const app = express();
 
-// middleware. add body to all requests
-app.use(json())
-app.use('/auth',authRouter)
+app.use(json()); // middleware. adds body to all requests
+app.use("/v1/auth", authRouter);
 
-export default app
+export default app;
