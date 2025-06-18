@@ -1,47 +1,20 @@
-import { Request } from "express"
-
-
 export enum UserRoles {
-    admin = 'admin',
-    user = 'user'
-}
-
-export interface UserPayload {
-    id:number,
-    username:string,
-    email:string,
-    role:UserRoles
+  admin = "admin",
+  farmer = "farmer",
+  buyer = "buyer",
+  vet = "vet",
 }
 
 export interface Users {
-    id:number,
-    username:string,
-    email:string,
-    phoneNumber:string,
-    hashedPassword:string,
-    role:UserRoles,
-    createdAt:string,
-    isEmailVerified:string,
-    isDeactivated:string,
-    isDeleted:string
+  id: number;
+  first_name: string;
+  last_name: string;
+  user_name: string;
+  email: string;
+  hashed_password: string;
+  role: UserRoles;
+  created_at: string;
+  is_email_verified: boolean;
+  is_deactivated: boolean;
+  is_deleted: boolean;
 }
-
-export interface UserDetails {
-    id:number,
-    userId:number,
-    gender:string,
-    dob:string,
-    profilePic:string,
-    lastUpdated:string
-}
-
-export interface UserObject {
-    basic:Users,
-    details:UserDetails
-}
-
-export interface TokenRequest extends Request {
-    data?:UserPayload
-}
-
-
