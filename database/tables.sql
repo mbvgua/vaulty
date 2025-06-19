@@ -8,7 +8,7 @@ CREATE TABLE users (
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     user_name VARCHAR(100) UNIQUE,
-    email VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
     hashed_password VARCHAR(255),
     role ENUM('admin','farmer','buyer','vet') NOT NULL,
     created_at DATE DEFAULT(CURRENT_DATE),

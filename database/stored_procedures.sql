@@ -12,8 +12,8 @@ CREATE PROCEDURE addUser(
     IN role ENUM('admin','farmer','buyer','vet')
 )
 BEGIN
-    INSERT INTO users(id,first_name,last_name,user_name,email,hashed_password)
-    VALUES (@id,@first_name,@last_name,@user_name,@email,@hashed_password);
+    INSERT INTO users(id,first_name,last_name,user_name,email,hashed_password,role)
+    VALUES (id,first_name,last_name,user_name,email,hashed_password,role);
 END#
 
 -- getUserById
@@ -22,7 +22,7 @@ CREATE PROCEDURE getUserById(
 )
 BEGIN
     SELECT * FROM users
-    WHERE id=@id AND is_deleted=0;
+    WHERE id=id AND is_deleted=0;
 END#
 
 -- getUserByEmail
@@ -31,7 +31,7 @@ CREATE PROCEDURE getUserByEmail(
 )
 BEGIN
     SELECT * FROM users
-    WHERE email=@email AND is_deleted=0;
+    WHERE email=email AND is_deleted=0;
 END#
 
 -- getUserByUsername
@@ -40,7 +40,7 @@ CREATE PROCEDURE getUserByUserName(
 )
 BEGIN
     SELECT * FROM users
-    WHERE user_name=@user_name AND is_deleted=0;
+    WHERE user_name=user_name AND is_deleted=0;
 END#
 
 -- getAllUsers
@@ -60,8 +60,8 @@ CREATE PROCEDURE updateUser(
 )
 BEGIN
     UPDATE users
-    SET id=@id,first_name=@first_name,last_name=@last_name,user_name=@user_name,email=@email,hashed_password=@hashed_password
-    WHERE id=@id
+    SET id=id,first_name=first_name,last_name=last_name,user_name=user_name,email=email,hashed_password=hashed_password
+    WHERE id=id
     AND is_deleted=0;
 END#
 
@@ -71,7 +71,7 @@ CREATE PROCEDURE deactivateUserAccount(
 )
 BEGIN
     UPDATE users SET is_deactivated=1
-    WHERE id=@id;
+    WHERE id=id;
 END#
 
 -- deleteUserAccount
@@ -80,7 +80,7 @@ CREATE PROCEDURE deleteUserAccount(
 )
 BEGIN
     UPDATE users SET is_deleted=1
-    WHERE id=@id;
+    WHERE id=id;
 END#
 
 
@@ -94,7 +94,7 @@ CREATE PROCEDURE addBird(
 )
 BEGIN
     INSERT INTO birds(id,user_id,bird_type,bird_details)
-    VALUES(@id,@user_id,@bird_type,@bird_details);
+    VALUES(id,user_id,bird_type,bird_details);
 END#
 
 -- getBirdById
@@ -103,7 +103,7 @@ CREATE PROCEDURE getBirdById(
 )
 BEGIN
     SELECT * FROM birds
-    WHERE id=@id AND is_deleted=0;
+    WHERE id=id AND is_deleted=0;
 END#
 
 -- getAllBirds
@@ -120,8 +120,8 @@ CREATE PROCEDURE updateBird(
 )
 BEGIN
     UPDATE birds
-    SET bird_type=@bird_type, bird_details=@bird_details
-    WHERE id=@id AND is_deleted=0;
+    SET bird_type=bird_type, bird_details=bird_details
+    WHERE id=id AND is_deleted=0;
 END#
 
 -- deleteBird
@@ -130,7 +130,7 @@ CREATE PROCEDURE deleteBird(
 )
 BEGIN
     UPDATE birds
-    SET is_deleted=1 WHERE id=@id;
+    SET is_deleted=1 WHERE id=id;
 END#
 
 
@@ -145,7 +145,7 @@ CREATE PROCEDURE addCoop(
 )
 BEGIN
     INSERT INTO coops(id,user_id,bird_id,coop_name,coop_details)
-    VALUES (@id,@user_id,@bird_id,@coop_name,@coop_details);
+    VALUES (id,user_id,bird_id,coop_name,coop_details);
 END#
 
 -- getCoopById
@@ -154,7 +154,7 @@ CREATE PROCEDURE getCoopById(
 )
 BEGIN
     SELECT * FROM coops
-    WHERE id=@id AND is_deleted=0;
+    WHERE id=id AND is_deleted=0;
 END#
 
 -- getCoopByName
@@ -163,7 +163,7 @@ CREATE PROCEDURE getCoopByName(
 )
 BEGIN
     SELECT * FROM coops
-    WHERE coop_name=@coop_name AND is_deleted=0;
+    WHERE coop_name=coop_name AND is_deleted=0;
 END#
 
 -- getAllCoops
@@ -183,8 +183,8 @@ CREATE PROCEDURE updateCoop(
 )
 BEGIN
     UPDATE coops
-    SET user_id=@user_id,bird_id=@bird_id,coop_name=@coop_name,coop_details=@coop_details
-    WHERE id=@id AND is_deleted=0;
+    SET user_id=user_id,bird_id=bird_id,coop_name=coop_name,coop_details=coop_details
+    WHERE id=id AND is_deleted=0;
 END#
 
 -- deleteCoop
@@ -193,7 +193,7 @@ CREATE PROCEDURE deleteCoop(
 )
 BEGIN
     UPDATE coops
-    SET is_deleted=1 WHERE id=@id;
+    SET is_deleted=1 WHERE id=id;
 END#
 
 -- feeds storedProcedures
@@ -207,7 +207,7 @@ CREATE PROCEDURE addFeed(
 )
 BEGIN
     INSERT INTO feeds(id,coop_id,expense_id,feed_type,quantity)
-    VALUES(@id,@coop_id,@expense_id,@feed_type,@quantity);
+    VALUES(id,coop_id,expense_id,feed_type,quantity);
 END#
 
 -- getFeedById
@@ -216,7 +216,7 @@ CREATE PROCEDURE getFeedById(
 )
 BEGIN
     SELECT * FROM feeds
-    WHERE id=@id ANd is_deleted=0;
+    WHERE id=id ANd is_deleted=0;
 END#
 
 -- getFeedByType
@@ -225,7 +225,7 @@ CREATE PROCEDURE getFeedByType(
 )
 BEGIN
     SELECT * FROM feeds
-    WHERE feed_type=@feed_type AND is_deleted=0;
+    WHERE feed_type=feed_type AND is_deleted=0;
 END#
 
 -- getAllFeeds
@@ -244,8 +244,8 @@ CREATE PROCEDURE updateFeed(
 )
 BEGIN
     UPDATE feeds
-    SET coop_id=@coop_id,expense_id=@expense_id,feed_type=@feed_type,quantity=@quantity
-    WHERE id=@id AND is_deleted=0;
+    SET coop_id=coop_id,expense_id=expense_id,feed_type=feed_type,quantity=quantity
+    WHERE id=id AND is_deleted=0;
 END#
 
 -- deleteFeed
@@ -254,7 +254,7 @@ CREATE PROCEDURE deleteFeed(
 )
 BEGIN
     UPDATE feeds
-    SET is_deleted=1 WHERE id=@id;
+    SET is_deleted=1 WHERE id=id;
 END#
 
 -- expenses storedProcedures
@@ -269,7 +269,7 @@ CREATE PROCEDURE addExpense(
 )
 BEGIN
     INSERT INTO expenses(id,user_id,coop_id,category,amount,description)
-    VALUES(@id,@user_id,@coop_id,@category,@amount,@description);
+    VALUES(id,user_id,coop_id,category,amount,description);
 END#
 
 -- getExpenseById
@@ -278,7 +278,7 @@ CREATE PROCEDURE getExpenseById(
 )
 BEGIN
     SELECT * FROM expenses
-    WHERE id=@id AND is_deleted=0;
+    WHERE id=id AND is_deleted=0;
 END#
 
 -- getExpenseByCategory
@@ -287,7 +287,7 @@ CREATE PROCEDURE getExpenseByCategory(
 )
 BEGIN
     SELECT * FROM expenses
-    WHERE category=@category AND is_deleted=0;
+    WHERE category=category AND is_deleted=0;
 END#
 
 -- getAllExpenses
@@ -307,7 +307,7 @@ CREATE PROCEDURE updateExpense(
 )
 BEGIN
     UPDATE expenses
-    SET user_id=@user_id,coop_id=@coop_id,category=@category,amount=@amount,description=@description
+    SET user_id=user_id,coop_id=coop_id,category=category,amount=amount,description=description
     WHERE is_deleted=0;
 END#
 
@@ -317,7 +317,7 @@ CREATE PROCEDURE deleteExpense(
 )
 BEGIN
     UPDATE expenses
-    SET is_deleted=1 WHERE id=@id;
+    SET is_deleted=1 WHERE id=id;
 END#
 
 -- return normal termination semi-colons
