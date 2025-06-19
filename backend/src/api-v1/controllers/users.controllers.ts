@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import mysql from "mysql2/promise";
+import mysql, { ProcedureCallPacket, ResultSetHeader } from "mysql2/promise";
 import { v4 as uid } from "uuid";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 
 import { sqlConfig } from "../../config";
 import { sqlError } from "../models/db.models";
-import { UserRoles } from "../models/users.models";
+import { UserRoles, Users } from "../models/users.models";
 import { registrationSchema } from "../validators/users.validators";
 
 dotenv.config();
@@ -25,7 +25,10 @@ export async function registerUser(request: Request, response: Response) {
         code: 422,
         status: "error",
         message: "Validation error occurred: ",
-        data: error,
+        data: {
+          location: error.details[0].path,
+          message: error.details[0].message,
+        },
         metadata: {},
       });
     }
@@ -33,19 +36,9 @@ export async function registerUser(request: Request, response: Response) {
     const hashed_password = await bcrypt.hash(password, saltRounds);
 
     const connection = await pool.getConnection();
-    const [rows, fields] = await connection.query(
-      `INSERT INTO users VALUES(
-            '${id}',
-            '${first_name}',
-            '${last_name}',
-            '${user_name}',
-            '${email}',
-            '${hashed_password}',
-            '${role}',
-            DEFAULT,
-            DEFAULT,
-            DEFAULT,
-            DEFAULT);`,
+    await connection.query(
+            "CALL addUser(?,?,?,?,?,?,?)",
+            [ id,first_name,last_name,user_name,email,hashed_password,role]
     );
     connection.release();
 
@@ -61,7 +54,7 @@ export async function registerUser(request: Request, response: Response) {
           user_name: `${user_name}`,
           email: `${email}`,
           role: `${role}`,
-          password: `${password}`,
+          password: `${hashed_password}`,
         },
       },
       metadata: {},
