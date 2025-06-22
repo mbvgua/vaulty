@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import mysql, { ProcedureCallPacket, ResultSetHeader } from "mysql2/promise";
+import mysql  from "mysql2/promise";
 import { v4 as uid } from "uuid";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 
-import { sqlConfig } from "../../config";
+import { pool } from "../../config/db.config";
 import { sqlError } from "../models/db.model";
 import { UserRoles, Users } from "../models/user.model";
 import {
@@ -14,7 +14,6 @@ import {
 } from "../validators/user.validator";
 
 dotenv.config();
-const pool = mysql.createPool(sqlConfig);
 
 export async function registerUser(request: Request, response: Response) {
   const id = uid();

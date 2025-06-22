@@ -1,4 +1,4 @@
-export interface sqlConfiguration {
+export interface sqlConfigOptions {
   host: string;
   user?: string;
   password?: string;
