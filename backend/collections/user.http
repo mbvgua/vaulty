@@ -7,8 +7,8 @@ Content-Type: application/json
 {
     "first_name":"General",
     "last_name":"Liutenant",
-    "user_name":"marko",
-    "email":"admin2@gmail.com",
+    "user_name":"minimus",
+    "email":"minimus@gmail.com",
     "password":"@Lance25"
 }
 
