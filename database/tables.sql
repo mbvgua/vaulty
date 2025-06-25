@@ -12,6 +12,7 @@ CREATE TABLE users (
     hashed_password VARCHAR(255),
     role ENUM('admin','farmer','buyer','vet') NOT NULL,
     created_at DATE DEFAULT(CURRENT_DATE),
+    is_welcome_email_sent BOOLEAN DEFAULT 0,
     is_email_verified BOOLEAN DEFAULT 0,
     is_deactivated BOOLEAN DEFAULT 0,
     is_deleted BOOLEAN DEFAULT 0
