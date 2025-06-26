@@ -1,10 +1,9 @@
-import { Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import handlebars from "handlebars";
-import { pool } from "../../config/db.config";
 import fs from "fs";
 
+import { pool } from "../../config/db.config";
 import { Users } from "../models/user.model";
 import { sendEmail } from "../helpers/send-email.helper";
 import { nodeMailerMessageOptions } from "../models/node-mailer.model";
@@ -24,7 +23,7 @@ const source = fs.readFileSync(templatePath, "utf8");
 const compiledTemplate = handlebars.compile(source);
 
 //export async function sendWelcomeEmail(message: nodeMailerMessageOptions, response:Response) {
-export async function welcomeUser() {
+export async function sendWelcomeEmail() {
   try {
     const connection = await pool.getConnection();
     const [rows, fields] = await connection.query(
@@ -33,10 +32,10 @@ export async function welcomeUser() {
     // BUG: when I use the stored procedure, it returne a ResultHeader alongside
     // the query that makes it harder to destructure in the .forEach below
     //const [rows, fields] = await connection.query("CALL getUnverifiedUsers();");
-    const unverifiedUsers = rows as Users[];
+    const unwelcomedUsers = rows as Users[];
 
-    if (unverifiedUsers.length > 0) {
-      unverifiedUsers.forEach(async (user) => {
+    if (unwelcomedUsers.length > 0) {
+      unwelcomedUsers.forEach(async (user) => {
         const data = compiledTemplate({
           name: user.user_name,
           email: user.email,
@@ -55,7 +54,7 @@ export async function welcomeUser() {
 
         ////update the user in the db
         await connection.query(
-          `UPDATE users SET is_welcome_email_sent=1 WHERE id="${user.id}"`,
+          `UPDATE users SET is_welcome_email_sent=1 WHERE id="${user.id}";`,
         );
 
         //TODO: figure out how to return this as a response
