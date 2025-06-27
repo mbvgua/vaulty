@@ -1,3 +1,5 @@
+USE vaulty;
+
 delimiter #
  
 -- userViews 
@@ -37,9 +39,9 @@ AS
 -- coopViews
 CREATE VIEW getCoopBirdsView
 AS
-    SELECT coops.name,coops.coop_details,birds.bird_type,birds.details FROM coops
+    SELECT coops.coop_name,coops.coop_details,birds.bird_type,birds.bird_details FROM coops
     INNER JOIN birds
-    ON coops.id = birds.coop_id
+    ON coops.bird_id = birds.id
     WHERE coops.is_deleted = 0 AND birds.is_deleted=0;
 #
 

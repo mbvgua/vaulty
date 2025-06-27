@@ -13,13 +13,13 @@ CREATE TABLE users (
     role ENUM('admin','farmer','buyer','vet') NOT NULL,
     created_at DATE DEFAULT(CURRENT_DATE),
     is_welcome_email_sent BOOLEAN DEFAULT 0,
-    is_email_verified BOOLEAN DEFAULT 0,
+    is_email_verified ENUM("yes","no","pending") DEFAULT 'no',
     is_deactivated BOOLEAN DEFAULT 0,
     is_deleted BOOLEAN DEFAULT 0
 );
 
 -- indexes
-CREATE INDEX username_index ON users(username);
+CREATE INDEX username_index ON users(user_name);
 CREATE INDEX email_index ON users(email);
 CREATE INDEX role_index ON users(role);
 
@@ -37,7 +37,7 @@ CREATE TABLE birds (
 CREATE INDEX bird_type_index ON birds(bird_type);
 
 -- coops table
-CREATE TABLE coops(
+CREATE TABLE coops (
     id VARCHAR(255) PRIMARY KEY,
     user_id VARCHAR(255),
     bird_id VARCHAR(255),
@@ -74,6 +74,7 @@ CREATE INDEX category_index ON expenses(category);
 -- feeds table
 CREATE TABLE feeds (
     id VARCHAR(255) PRIMARY KEY,
+    user_id VARCHAR(255),
     coop_id VARCHAR(255),
     expense_id VARCHAR(255),
     feed_type ENUM('starter','grower','layer','broiler') NOT NULL,
@@ -81,6 +82,7 @@ CREATE TABLE feeds (
     is_deleted BOOLEAN DEFAULT 0,
     acquired_on DATE DEFAULT(CURRENT_DATE),
     estimated_finish DATE DEFAULT(CURRENT_DATE),
+    FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (coop_id) REFERENCES coops(id),
     FOREIGN KEY (expense_id) REFERENCES expenses(id)
 );

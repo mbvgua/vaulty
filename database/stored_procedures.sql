@@ -1,3 +1,5 @@
+USE vaulty;
+
 delimiter #
 
 -- users storedProcedures
@@ -18,11 +20,11 @@ END#
 
 -- getUserById
 CREATE PROCEDURE getUserById(
-    IN id VARCHAR(255)
+    IN user_id VARCHAR(255)
 )
 BEGIN
     SELECT * FROM users
-    WHERE id=id AND is_deleted=0;
+    WHERE id=user_id AND is_deleted=0;
 END#
 
 -- getUserByEmail
