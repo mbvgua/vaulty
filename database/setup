@@ -1,0 +1,130 @@
+#!/usr/bin/python
+
+import sys
+import subprocess
+
+
+tearup_files = [
+    "tables.sql",
+    "stored_procedures.sql",
+    "views.sql",
+]
+teardown_file = ["drop_db.sql",]
+use_case = int(
+    input(
+        """
+What would you like to do:
+    1.Setup the database.
+    2.Teardown the database.
+
+To proceed, select one option(1 or 2): """
+    )
+)
+
+
+# got this from the docs. understood it from python morsels
+def db_operation(operation):
+    if operation == 1:
+        print(" ")
+        print("You selected setting up the database.")
+        target_files = subprocess.run(["ls"], capture_output=True, text=True)
+        # print(type(target_files.stdout))
+        files = target_files.stdout.splitlines()
+        print(" ")
+        print(f"Current files in this directory are: {files}")
+
+        # try:
+        confirm = "Y"
+        while confirm != "N":
+            if tearup_files[0] in files:
+                print(f"setting up the {tearup_files[0]}...")
+                # shell=True will allow me to place a continous shell command
+                db_process = subprocess.run(
+                    [f"mysql -uroot -p <{tearup_files[0]}> output.tab"],
+                    shell=True,
+                    capture_output=True,
+                )
+                if db_process.returncode == 0:
+                    user_choice = input(
+                        f"Finished setting up the {tearup_files[0]}. Continue to {tearup_files[1]}?(y/N)"
+                    )
+                    confirm = user_choice.upper()
+                    if confirm == "N":
+                        print(f"Files not yet setup are: {tearup_files[1:]}.")
+                        break
+                elif db_process.returncode != 0:
+                    print(f"An error occurred while setting up the {tearup_files[1]}")
+                    sys.stderr.write(str(db_process.stderr))
+                    sys.exit(db_process.returncode)
+                else:
+                    print("An error occurred")
+
+            if tearup_files[1] in files:
+                print(f"setting up the {tearup_files[1]}...")
+                db_process = subprocess.run(
+                    [f"mysql -uroot -p <{tearup_files[1]}> output.tab"],
+                    shell=True,
+                    capture_output=True,
+                )
+                if db_process.returncode == 0:
+                    user_choice = input(
+                        f"Finished setting up the {tearup_files[1]}. Continue to {tearup_files[2]}?(y/N)"
+                    )
+                    confirm = user_choice.upper()
+                    if confirm == "N":
+                        print(f"Files not yet setup are: {tearup_files[2:]}.")
+                        break
+                elif db_process.returncode != 0:
+                    print(f"An error occurred while setting up the {tearup_files[1]}")
+                    sys.stderr.write(str(db_process.stderr))
+                    sys.exit(db_process.returncode)
+                else:
+                    print("An error occurred")
+
+            if tearup_files[2] in files:
+                print(f"setting up the {tearup_files[2]}...")
+                db_process = subprocess.run(
+                    [f"mysql -uroot -p <{tearup_files[2]}> output.tab"],
+                    shell=True,
+                    capture_output=True,
+                )
+                if db_process.returncode == 0:
+                    print(f"Finished setting up the {tearup_files[2]}")
+                    # break out of loop execution
+                    break
+                elif db_process.returncode != 0:
+                    print(f"An error occurred while setting up the {tearup_files[2]}")
+                    sys.stderr.write(str(db_process.stderr))
+                    sys.exit(db_process.returncode)
+                else:
+                    print("An error occurred")
+                    break
+
+            # check to test if vaulty is in db.. then
+            print("Completed setting up the database...")
+    # user chose option 2
+    elif operation == 2:
+        user_choice = input("Are you sure you want to delete the entire database?(y/N)")
+        if user_choice.upper() == "Y":
+            print("Deleting the database. I hope you have backups! ;)")
+            db_process = subprocess.run(
+                [f"mysql -uroot -p < {teardown_file[0]}"],
+                shell=True,
+                capture_output=True,
+            )
+            if db_process.returncode == 0:
+                print("Finished deleting the database!")
+            elif db_process.returncode != 0:
+                print(f"An error occurred while setting up the {teardown_file[0]}")
+                sys.stderr.write(str(db_process.stderr))
+                sys.exit(db_process.returncode)
+            else:
+                print("An error occurred")
+        else:
+            print("Database purge avoided. Close call! :)")
+    # choice not either 1 or 2
+    else:
+        print("Invalid choice. Select any of the two choices given.")
+
+
+db_operation(use_case)

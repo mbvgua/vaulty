@@ -30,13 +30,11 @@ Each table above will have a list of stored procedures associated with it:
 
 | Table Name   | Sored Procedures    |
 |--------------- | --------------- |
-| users   | <table> <thead> <th> Name</th> <th>Description</th> </thead> <tbody> <tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr> </tbody> </table>|
-| birds   | <table> <thead> <th> Name</th> <th>Description</th> </thead> <tbody> <tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr> </tbody> </table>|
-| coops   | <table> <thead> <th> Name</th> <th>Description</th> </thead> <tbody> <tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr> </tbody> </table>|
-| feeds   | <table> <thead> <th> Name</th> <th>Description</th> </thead> <tbody> <tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr> </tbody> </table>|
-| expenses| <table> <thead> <th> Name</th> <th>Description</th> </thead> <tbody> <tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr> </tbody> </table>|
-
-
+| users   | <table> <thead> <th> Name</th> <th>Description</th> </thead> <tbody> <tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserById</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserByEmail</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserByUserName</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getAllUsers</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>updateUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>deactivateUserAccount</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>deleteUserAccount</td> <td> wefdwedwdwdwdw</td> </tr> </tbody> </table>|
+| birds   | <table> <thead> <th> Name</th> <th>Description</th> </thead> <tbody> <tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserById</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserByEmail</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserByUserName</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getAllUsers</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>updateUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>deactivateUserAccount</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>deleteUserAccount</td> <td> wefdwedwdwdwdw</td> </tr> </tbody> </table>|
+| coops   | <table> <thead> <th> Name</th> <th>Description</th> </thead> <tbody> <tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserById</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserByEmail</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserByUserName</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getAllUsers</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>updateUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>deactivateUserAccount</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>deleteUserAccount</td> <td> wefdwedwdwdwdw</td> </tr> </tbody> </table>|
+| feeds   | <table> <thead> <th> Name</th> <th>Description</th> </thead> <tbody> <tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserById</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserByEmail</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserByUserName</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getAllUsers</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>updateUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>deactivateUserAccount</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>deleteUserAccount</td> <td> wefdwedwdwdwdw</td> </tr></tbody> </table>|
+| expenses| <table> <thead> <th> Name</th> <th>Description</th> </thead> <tbody> <tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserById</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserByEmail</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getUserByUserName</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>getAllUsers</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>addUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>updateUser</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>deactivateUserAccount</td> <td> wefdwedwdwdwdw</td> </tr><tr> <td>deleteUserAccount</td> <td> wefdwedwdwdwdw</td> </tr> </tbody> </table>|
 ### Views
 
 Views act like tables and they help us run complex repititive queries easily, they include:
@@ -60,7 +58,18 @@ Views act like tables and they help us run complex repititive queries easily, th
 To create the entire database using a script, navigate to this directory and run:
 
 ```sh
-    $ bash db
+    $ chmod +x setup.py
+    $ ./setup.py
 ```
 
 This runs a shell script that either setups or tears down the entire database schema.
+
+> [!WARNING]
+> The shebang on the script is designed for linux systems, on windows and MacOs systems, you will need to alter it to match the location of your python executable. The command `whereis python` might be a good place to start.
+```bash
+    $ whereis python
+    #or go into the python REPL and get the exact path
+    $ python
+    >>> import os
+    >>> print(os.executable())
+```
