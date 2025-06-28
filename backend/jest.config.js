@@ -2,8 +2,9 @@
 module.exports = {
   testEnvironment: "node",
   transform: {
-    "^.+\.tsx?$": ["ts-jest",{}],
+    "^.+\.tsx?$": ["ts-jest", {}],
   },
-  verbose:true,
+  rootDir: "./dist",
   // clearMocks:true,
 };
+
