@@ -59,13 +59,14 @@ To create the entire database using a script, navigate to this directory and run
 
 ```sh
     $ chmod +x setup.py
-    $ ./setup.py
+    $ ./setup
 ```
 
 This runs a shell script that either setups or tears down the entire database schema.
 
-> [!WARNING]
-> The shebang on the script is designed for linux systems, on windows and MacOs systems, you will need to alter it to match the location of your python executable. The command `whereis python` might be a good place to start.
+> [!IMPORTANT]
+> The shebang on the script is designed for linux systems, on windows and MacOs systems, you will need to alter it to match the location of your python executable. The command `whereis python` might be a good place to start as illustrated below:
+
 ```bash
     $ whereis python
     #or go into the python REPL and get the exact path
