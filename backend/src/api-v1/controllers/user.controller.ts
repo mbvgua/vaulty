@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import mysql  from "mysql2/promise";
+import mysql from "mysql2/promise";
 import { v4 as uid } from "uuid";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
@@ -193,6 +193,55 @@ export async function loginUser(request: Request, response: Response) {
         metadata: {},
       });
     }
+  } catch (error: sqlError | any) {
+    return response.status(500).json({
+      code: 500,
+      status: "error",
+      message: "Internal server error occurred: ",
+      data: error,
+      metadata: {},
+    });
+  }
+}
+
+export async function verifyEmail(
+  request: Request<{ id: string }>,
+  response: Response,
+) {
+  const id = request.params.id;
+
+  try {
+    const connection = await pool.getConnection();
+    const [rows] = await connection.query("CALL getUserById(?);", [id]);
+    const user = rows as Users[];
+    const [actual_user] = user[0]; //has errors but its the only one that works
+
+    if (user.length > 0 && actual_user.is_email_verified != "yes") {
+      await connection.query("CALL setVerifiedEmails(?);", [id]);
+      return response.status(200).json({
+        code: 200,
+        status: "success",
+        message: `User ${id} has successfuly verified their account!`,
+        data: {
+          id: actual_user.id,
+          user_name: actual_user.user_name,
+          email: actual_user.email,
+          is_email_verified: actual_user.is_email_verified,
+          is_deactivated: actual_user.is_deactivated,
+        },
+        metadata: {},
+      });
+    }
+    return response.status(404).json({
+      code: 404,
+      status: "error",
+      message:
+        "User does not exist or account is already verified. Try a different id?",
+      data: {
+        id: id,
+      },
+      metadata: {},
+    });
   } catch (error: sqlError | any) {
     return response.status(500).json({
       code: 500,

@@ -13,8 +13,8 @@ export interface Users {
   email: string;
   hashed_password: string;
   role: UserRoles;
-  created_at: string;
-  is_email_verified: boolean;
-  is_deactivated: boolean;
-  is_deleted: boolean;
+  created_at?: string;
+  is_email_verified?: string;
+  is_deactivated?: string;
+  is_deleted?: string;
 }
