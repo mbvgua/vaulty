@@ -1,0 +1,25 @@
+
+###
+# register new user to the system
+POST http://localhost:4000/v1/auth/register
+Content-Type: application/json
+
+{
+    "first_name":"General",
+    "last_name":"Liutenant",
+    "user_name":"mende",
+    "email":"mende@gmail.com",
+    "password":"@Lance25"
+}
+
+###
+# login existing user
+POST http://localhost:4000/v1/auth/login
+Content-Type: application/json
+
+{
+    "userNameOrEmail":"admin2@gmail.com",
+    "password":"@Lance25"
+}
+
+###

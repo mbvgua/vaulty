@@ -7,27 +7,15 @@ assignees:
 body: 
   - type: markdown
     attributes: 
-      values: |
+      value: |
         Please make sure this feature request hasn't been already submitted by someone by looking through other open/closed issues
   - type: textarea
     id: description
     attributes: 
       label: Description
       description: Give us a brief description of the feature or enhancement you would like
-      validations: 
-        required: true
-  - type: textarea
-    id: steps to reproduce
-    attributes:
-      label: Steps to Reproduce
-      description: How do you trigger this bug? Please walk us through it step by step.
-      placeholder: |
-        1. Go to '...'
-        2. Click on '...'
-        3. Scroll down to '...'
-        4. Error appears when '...'
-      validations:
-        required: true
+    validations: 
+      required: true
   - type: textarea
     id: additional-information
     attributes:

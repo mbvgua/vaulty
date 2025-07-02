@@ -7,7 +7,7 @@ assignees:
 body: 
   - type: markdown
     attributes: 
-      values: |
+      value: |
         Thanks for taking the time to file this bug report.
         Kindly ensure that they're are no opened/closed issues for this topic.
   - type: textarea
@@ -15,10 +15,10 @@ body:
     attributes: 
       label: Description of the bug
       description: Give us a brief description of what happened and what should have happened
-      validations: 
-        required: true
+    validations: 
+      required: true
   - type: textarea
-    id: steps to reproduce
+    id: steps-to-reproduce
     attributes:
       label: Steps to Reproduce
       description: How do you trigger this bug? Please walk us through it step by step.
@@ -27,8 +27,8 @@ body:
         2. Click on '...'
         3. Scroll down to '...'
         4. Error appears when '...'
-      validations:
-        required: true
+    validations:
+      required: true
   - type: textarea
     id: additional-information
     attributes:
