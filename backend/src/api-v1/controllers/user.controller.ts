@@ -182,20 +182,20 @@ export async function verifyEmail(
   request: Request<{ id: string }>,
   response: Response,
 ) {
-  const id = request.params.id;
+  const user_id = request.params.id;
 
   try {
     const connection = await pool.getConnection();
-    const [rows] = await connection.query("CALL getUserById(?);", [id]);
+    const [rows] = await connection.query("CALL getUserById(?);", [user_id]);
     const user = rows as Users[];
     const [actual_user] = user[0]; //has errors but its the only one that works
 
     if (user.length > 0 && actual_user.is_email_verified != "yes") {
-      await connection.query("CALL setVerifiedEmails(?);", [id]);
+      await connection.query("CALL setVerifiedEmails(?);", [user_id]);
       return response.status(200).json({
         code: 200,
         status: "success",
-        message: `User ${id} has successfuly verified their account!`,
+        message: `User ${user_id} has successfuly verified their account!`,
         data: {
           id: actual_user.id,
           user_name: actual_user.user_name,
@@ -212,7 +212,7 @@ export async function verifyEmail(
       message:
         "User does not exist or account is already verified. Try a different id?",
       data: {
-        id: id,
+        id: user_id,
       },
       metadata: {},
     });

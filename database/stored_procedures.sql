@@ -51,19 +51,19 @@ BEGIN
 END#
 
 -- getUnverifiedEmails
--- CREATE PROCEDURE getUnverifiedEmails()
--- BEGIN
---     SELECT * FROM users WHERE is_email_verified=0 AND is_deleted=0;
--- END#
+CREATE PROCEDURE getUnverifiedEmails()
+BEGIN
+    SELECT * FROM users WHERE is_email_verified="no" AND is_deleted=0;
+END#
 
 -- setVerifiedEmails
--- CREATE PROCEDURE setVerifiedEmails(
---     IN id VARCHAR(255)
--- )
--- BEGIN
---     UPDATE users SET is_email_verified=1 
---     WHERE id=id AND is_deleted=0;
--- END#
+CREATE PROCEDURE setVerifiedEmails(
+    IN user_id VARCHAR(255)
+)
+BEGIN
+    UPDATE users SET is_email_verified="yes" 
+    WHERE id=user_id AND is_deleted=0;
+END#
 
 -- updateUser
 CREATE PROCEDURE updateUser(
