@@ -3,7 +3,7 @@ import { loginUser, registerUser, verifyEmail } from "../controllers/user.contro
 
 const authRouter: Router = Router();
 
-authRouter.post("/register", registerUser);
+authRouter.post("/register",registerUser);
 authRouter.post("/login", loginUser);
 authRouter.post("/verify-email/:id", verifyEmail);
 
