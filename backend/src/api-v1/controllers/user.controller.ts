@@ -12,6 +12,7 @@ import {
   loginUserNameSchema,
   registerSchema,
 } from "../validators/user.validator";
+import { validationHelper } from "../helpers/verify-schema.helper";
 
 dotenv.config();
 
@@ -22,16 +23,7 @@ export async function registerUser(request: Request, response: Response) {
   const { first_name, last_name, user_name, email, password } = request.body;
 
   try {
-    const { error } = registerSchema.validate(request.body);
-    if (error) {
-      return response.status(422).json({
-        code: 422,
-        status: "error",
-        message: "Validation error occurred: ",
-        data: error.details[0].message,
-        metadata: {},
-      });
-    }
+    validationHelper(request, response, registerSchema);
     const saltRounds = 9;
     const hashed_password = await bcrypt.hash(password, saltRounds);
 
@@ -82,16 +74,7 @@ export async function loginUser(request: Request, response: Response) {
 
     if (emailRegex.test(userNameOrEmail)) {
       //dealing with email
-      const { error } = loginEmailSchema.validate(request.body);
-      if (error) {
-        return response.status(422).json({
-          code: 422,
-          status: "error",
-          message: "Validation error occurred: ",
-          data: error.details[0].message,
-          metadata: {},
-        });
-      }
+      validationHelper(request, response, loginEmailSchema);
 
       // no validation error present
       const connection = await pool.getConnection();
@@ -137,16 +120,7 @@ export async function loginUser(request: Request, response: Response) {
       });
     } else {
       //dealing with username
-      const { error } = loginUserNameSchema.validate(request.body);
-      if (error) {
-        return response.status(422).json({
-          code: 422,
-          status: "error",
-          message: "Validation error occurred: ",
-          data: error.details[0].message,
-          metadata: {},
-        });
-      }
+      validationHelper(request, response, loginUserNameSchema);
 
       // no validation error present
       const connection = await pool.getConnection();
