@@ -2,7 +2,7 @@ import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 import path from "path";
 
-import { sqlConfigOptions } from "../api-v1/models/db.model";
+import { sqlConfigOptions } from "../api-v1/models/mysql.model";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
