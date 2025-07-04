@@ -7,8 +7,8 @@ Content-Type: application/json
 {
     "first_name":"General",
     "last_name":"Liutenant",
-    "user_name":"mende",
-    "email":"mende@gmail.com",
+    "user_name":"michael",
+    "email":"michael@gmail.com",
     "password":"@Lance25"
 }
 
@@ -18,8 +18,11 @@ POST http://localhost:4000/v1/auth/login
 Content-Type: application/json
 
 {
-    "userNameOrEmail":"admin2@gmail.com",
+    "userNameOrEmail":"daagie@gmail.com",
     "password":"@Lance25"
 }
 
+###
+# verify user emails
+POST http://localhost:4000/v1/auth/verify-email/73bdcd78-6c24-4ed0-b198-54c63fb15848
 ###

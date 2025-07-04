@@ -17,6 +17,6 @@ export async function validationHelper(
     });
   }
 
-  // proceed to next section
+  // else return true
   return true;
 }
