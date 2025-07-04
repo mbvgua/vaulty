@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
-import mysql from "mysql2/promise";
 import { v4 as uid } from "uuid";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 
-import { pool } from "../../config/db.config";
-import { sqlError } from "../models/db.model";
+import { pool } from "../../config/mysql.config";
+import { sqlError } from "../models/mysql.model";
 import { UserRoles, Users } from "../models/user.model";
 import {
   loginEmailSchema,
@@ -13,6 +12,7 @@ import {
   registerSchema,
 } from "../validators/user.validator";
 import { validationHelper } from "../helpers/verify-schema.helper";
+import { logger } from "../../config/winston.config";
 
 dotenv.config();
 
@@ -24,6 +24,15 @@ export async function registerUser(request: Request, response: Response) {
 
   try {
     validationHelper(request, response, registerSchema);
+
+    // TODO: figure out how to verify the returned validation values
+    // and get either true or false. Would help in better logging
+    // This is the one not working-- commented out
+    logger.info({
+      message: "User registration attempt",
+      data: { user_name, email },
+    });
+
     const saltRounds = 9;
     const hashed_password = await bcrypt.hash(password, saltRounds);
 
@@ -39,6 +48,13 @@ export async function registerUser(request: Request, response: Response) {
     ]);
     connection.release();
 
+    // log sucesful user registration
+    logger.info({
+      message: "Successful user registration",
+      data: { user_name, email },
+    });
+
+    // return response
     return response.status(201).json({
       code: 201,
       status: "success",
@@ -57,6 +73,13 @@ export async function registerUser(request: Request, response: Response) {
       metadata: {},
     });
   } catch (error: sqlError | any) {
+    // log errors
+    logger.error({
+      message: "Error occurred during user registration",
+      data: { user_name, email, error },
+    });
+
+    // return error response
     return response.status(500).json({
       code: 500,
       status: "error",
@@ -75,6 +98,11 @@ export async function loginUser(request: Request, response: Response) {
     if (emailRegex.test(userNameOrEmail)) {
       //dealing with email
       validationHelper(request, response, loginEmailSchema);
+      // log user login
+      logger.info({
+        message: "User login attempt",
+        data: { userNameOrEmail },
+      });
 
       // no validation error present
       const connection = await pool.getConnection();
@@ -91,6 +119,12 @@ export async function loginUser(request: Request, response: Response) {
           user[0].hashed_password,
         );
         if (passwordMatch) {
+          //log succesul login
+          logger.info({
+            message: "Successful login",
+            data: { username: user[0].user_name, email: user[0].email },
+          });
+
           return response.status(200).json({
             code: 200,
             status: "success",
@@ -106,6 +140,12 @@ export async function loginUser(request: Request, response: Response) {
         }
       }
       // no user/password match found
+      // log sucesful user registration
+      logger.info({
+        message: "Unsuccessful user login attempt",
+        data: { userNameOrEmail },
+      });
+
       return response.status(422).json({
         code: 422,
         status: "error",
@@ -121,6 +161,11 @@ export async function loginUser(request: Request, response: Response) {
     } else {
       //dealing with username
       validationHelper(request, response, loginUserNameSchema);
+      // log user login
+      logger.info({
+        message: "User login attempt",
+        data: { userNameOrEmail },
+      });
 
       // no validation error present
       const connection = await pool.getConnection();
@@ -139,6 +184,12 @@ export async function loginUser(request: Request, response: Response) {
           user[0].hashed_password,
         );
         if (passwordMatch) {
+          //log succesul login
+          logger.info({
+            message: "Successful login",
+            data: { username: user[0].user_name, email: user[0].email },
+          });
+
           return response.status(200).json({
             code: 200,
             status: "success",
@@ -154,6 +205,12 @@ export async function loginUser(request: Request, response: Response) {
         }
       }
       // no user/password match found
+      // log sucesful user registration
+      logger.info({
+        message: "Unsuccessful user login attempt",
+        data: { userNameOrEmail },
+      });
+
       return response.status(422).json({
         code: 422,
         status: "error",
@@ -217,6 +274,12 @@ export async function verifyEmail(
       metadata: {},
     });
   } catch (error: sqlError | any) {
+    // log errors
+    logger.error({
+      message: "Error occurred during user login",
+      data: { error },
+    });
+
     return response.status(500).json({
       code: 500,
       status: "error",

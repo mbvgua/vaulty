@@ -3,7 +3,7 @@ import path from "path";
 import handlebars from "handlebars";
 import fs from "fs";
 
-import { pool } from "../../config/db.config";
+import { pool } from "../../config/mysql.config";
 import { Users } from "../models/user.model";
 import { nodeMailerMessageOptions } from "../models/node-mailer.model";
 import { sendEmail } from "../helpers/send-email.helper";

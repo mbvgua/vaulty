@@ -1,32 +1,41 @@
+import path from "path";
 import winston, { format } from "winston";
 
-const customLogger = winston.createLogger({
-  level: "info",
-  format: format.combine(format.timestamp(), format.json()),
-  defaultMeta: { app: "backend" },
-  transports: [
-    // writes all logs of http or higher to given files
-    //new winston.transports.Console(),
-    new winston.transports.File({
-      filename: "../../logs/combined/combined.json",
-    }),
-    new winston.transports.File({
-      filename: "../../logs/combined/combined.log",
-    }),
+const logDir = path.resolve(__dirname, "../../logs/");
 
-    // error and higher to given files
-    new winston.transports.File({
-      filename: "../../logs/error/error.json",
-      level: "error",
-    }),
-    new winston.transports.File({
-      filename: "../../logs/error/error.log",
-      level: "error",
-    }),
-  ],
-  //silent:true,
-});
+const customLogger = () =>
+  winston.createLogger({
+    level: "info",
+    format: format.combine(format.timestamp(), format.json()),
+    defaultMeta: { app: "backend" },
+    exitOnError: false, //do not exit execution when error occurs
+    transports: [
+      // writes all logs of http or higher to given files
+      //new winston.transports.Console(),
+      new winston.transports.File({
+        filename: path.resolve(logDir, "combined/combined.json"),
+      }),
+      new winston.transports.File({
+        filename: path.resolve(logDir, "combined/combined.log"),
+      }),
 
-export const logger = customLogger;
+      // error and higher to given files
+      new winston.transports.File({
+        filename: path.resolve(logDir, "error/error.json"),
+        level: "error",
+      }),
+      new winston.transports.File({
+        filename: path.resolve(logDir, "error/error.log"),
+        level: "error",
+      }),
+    ],
+    // handle exceptions. because wheeuuu!!!
+    exceptionHandlers: [
+      new winston.transports.File({
+        filename: path.resolve(logDir, "exceptions/exceptions.log"),
+      }),
+    ],
+    //silent:true,
+  });
 
-logger.http("Hii ni uras banae")
+export const logger = customLogger();
