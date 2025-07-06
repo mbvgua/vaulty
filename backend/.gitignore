@@ -7,3 +7,7 @@ node_modules/
 # can be recreated
 dist/
 
+#ignore all the logs
+logs/**/*.log
+logs/**/*.json
+
