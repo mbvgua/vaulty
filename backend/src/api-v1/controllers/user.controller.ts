@@ -25,14 +25,6 @@ export async function registerUser(request: Request, response: Response) {
   try {
     validationHelper(request, response, registerSchema);
 
-    // TODO: figure out how to verify the returned validation values
-    // and get either true or false. Would help in better logging
-    // This is the one not working-- commented out
-    logger.info({
-      message: "User registration attempt",
-      data: { user_name, email },
-    });
-
     const saltRounds = 9;
     const hashed_password = await bcrypt.hash(password, saltRounds);
 
@@ -76,7 +68,7 @@ export async function registerUser(request: Request, response: Response) {
     // log errors
     logger.error({
       message: "Error occurred during user registration",
-      data: { user_name, email, error },
+      data: { error },
     });
 
     // return error response
@@ -98,11 +90,6 @@ export async function loginUser(request: Request, response: Response) {
     if (emailRegex.test(userNameOrEmail)) {
       //dealing with email
       validationHelper(request, response, loginEmailSchema);
-      // log user login
-      logger.info({
-        message: "User login attempt",
-        data: { userNameOrEmail },
-      });
 
       // no validation error present
       const connection = await pool.getConnection();
@@ -122,7 +109,10 @@ export async function loginUser(request: Request, response: Response) {
           //log succesul login
           logger.info({
             message: "Successful login",
-            data: { username: user[0].user_name, email: user[0].email },
+            data: {
+              username: user[0].user_name,
+              email: user[0].email,
+            },
           });
 
           return response.status(200).json({
@@ -143,7 +133,9 @@ export async function loginUser(request: Request, response: Response) {
       // log sucesful user registration
       logger.info({
         message: "Unsuccessful user login attempt",
-        data: { userNameOrEmail },
+        data: {
+          userNameOrEmail: userNameOrEmail,
+        },
       });
 
       return response.status(422).json({
@@ -161,11 +153,6 @@ export async function loginUser(request: Request, response: Response) {
     } else {
       //dealing with username
       validationHelper(request, response, loginUserNameSchema);
-      // log user login
-      logger.info({
-        message: "User login attempt",
-        data: { userNameOrEmail },
-      });
 
       // no validation error present
       const connection = await pool.getConnection();
@@ -187,7 +174,10 @@ export async function loginUser(request: Request, response: Response) {
           //log succesul login
           logger.info({
             message: "Successful login",
-            data: { username: user[0].user_name, email: user[0].email },
+            data: {
+              username: user[0].user_name,
+              email: user[0].email,
+            },
           });
 
           return response.status(200).json({
@@ -208,7 +198,9 @@ export async function loginUser(request: Request, response: Response) {
       // log sucesful user registration
       logger.info({
         message: "Unsuccessful user login attempt",
-        data: { userNameOrEmail },
+        data: {
+          userNameOrEmail: userNameOrEmail,
+        },
       });
 
       return response.status(422).json({
@@ -225,6 +217,12 @@ export async function loginUser(request: Request, response: Response) {
       });
     }
   } catch (error: sqlError | any) {
+    // log errors
+    logger.error({
+      message: "Error occurred during user login",
+      data: { error },
+    });
+
     return response.status(500).json({
       code: 500,
       status: "error",
@@ -249,6 +247,16 @@ export async function verifyEmail(
 
     if (user.length > 0 && actual_user.is_email_verified != "yes") {
       await connection.query("CALL setVerifiedEmails(?);", [user_id]);
+
+      // log sucesful user verification
+      logger.info({
+        message: "Succesful user email verification",
+        data: {
+          id: actual_user.id,
+          email: actual_user.email,
+        },
+      });
+
       return response.status(200).json({
         code: 200,
         status: "success",
@@ -263,6 +271,16 @@ export async function verifyEmail(
         metadata: {},
       });
     }
+
+    // log unsucesful user verification
+    logger.info({
+      message: "Unsuccesful user email verification",
+      data: {
+        id: actual_user.id,
+        email: actual_user.email,
+      },
+    });
+
     return response.status(404).json({
       code: 404,
       status: "error",
