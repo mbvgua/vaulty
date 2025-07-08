@@ -1,7 +1,7 @@
 import supertest from "supertest";
 
 import app from "../app";
-import { pool } from "../config/db.config";
+import { pool } from "../config/mysql.config";
 import { ResultSetHeader } from "mysql2";
 
 const request = supertest(app);
