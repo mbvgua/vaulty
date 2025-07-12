@@ -20,3 +20,19 @@ export interface sqlError {
   sqlMessage: string;
 }
 
+// result set header returned by the [rows] in mysql
+export interface CustomResultSetHeader {
+  fieldCount: number;
+  affectedRows: number;
+  insertId: number;
+  info: string;
+  serverStatus: number;
+  warningStatus: number;
+  stateChanges: {
+    systemVariables: {};
+    schema: string;
+    gtids: [];
+    trackStateChange?: string;
+  };
+  changedRows: number;
+}

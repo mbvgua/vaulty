@@ -3,7 +3,7 @@ import path from "path";
 import handlebars from "handlebars";
 import fs from "fs";
 
-import { pool } from "../../config/db.config";
+import { pool } from "../../config/mysql.config";
 import { Users } from "../models/user.model";
 import { nodeMailerMessageOptions } from "../models/node-mailer.model";
 import { sendEmail } from "../helpers/send-email.helper";
@@ -22,10 +22,11 @@ const compiledTemplate = handlebars.compile(source);
 export async function sendVerificationEmail() {
   try {
     const connection = await pool.getConnection();
-    const [rows, fields] = await connection.query(
-      "SELECT * FROM users WHERE is_welcome_email_sent=1 AND is_email_verified='no' AND is_deactivated=0;",
+    const [rows, fileds] = await connection.query(
+      "CALL getUnverifiedEmails();",
     );
-    const unverifiedUsers = rows as Users[];
+    // TODO: code works. Find out how to remove error?
+    const unverifiedUsers = rows[0] as Users[];
     if (unverifiedUsers.length > 0) {
       unverifiedUsers.forEach(async (user) => {
         const data = compiledTemplate({
@@ -81,3 +82,5 @@ export async function sendVerificationEmail() {
     );
   }
 }
+
+sendVerificationEmail();

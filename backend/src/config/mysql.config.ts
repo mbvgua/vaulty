@@ -2,12 +2,12 @@ import mysql from "mysql2/promise";
 import dotenv from "dotenv";
 import path from "path";
 
-import { sqlConfigOptions } from "../api-v1/models/db.model";
+import { sqlConfigOptions } from "../api-v1/models/mysql.model";
 
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 // sql config values
-export const sqlConfig: sqlConfigOptions = {
+const sqlConfig: sqlConfigOptions = {
   host: "localhost",
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
