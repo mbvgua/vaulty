@@ -1,26 +1,51 @@
 <nav>
-    <!-- main div section -->
-    <div class="main-nav">
+  <!-- main div section -->
+  <div class="main-nav">
+    <header
+      class="d-flex flex-wrap justify-content-around px-4 py-3 mb-4 border-bottom"
+    >
+      <a
+        href="/"
+        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+      >
+        <span class="fs-2 fw-bold">Vaulty</span>
+      </a>
 
-        <!-- name and logo -->
-         <div class="title">
-            <label> vaulty </label>
-            <span>.</span>
-         </div>
+      <ul class="nav nav-pills">
+        <!--TODO: figure out how to use the -->
+        <!--        routerLinkActive="active"-->
+        <!--        [routerLinkActiveOptions]="{ exact: true }"-->
+        <!--oprions here. when used im either getting all elements highlighted-->
+        <!--or an error-->
+        @for (item of navbarItems; track $index) {
+          <li class="nav-item">
+            <a
+              class="nav-link fs-5"
+              aria-current="page"
+              routerLink="{{ item.link }}"
+            >
+              {{ item.name }}
+            </a>
+          </li>
+        }
+      </ul>
 
-        <!-- menu list items -->
-         <div class="menu-list">
-            <ul>
-                <li> home </li>
-                <li> about </li>
-                <li> contact us </li>
-            </ul>
-         </div>
+      <!--the user profile section-->
 
-        <!-- signup/signin buttons -->
-         <div class="auth-section">
-            <label> signup </label>
-         </div>
+      <!--<div class="flex-shrink-0 dropdown">-->
+      <!--  <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">-->
+      <!--    <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">-->
+      <!--  </a>-->
+      <!--  <ul class="dropdown-menu text-small shadow">-->
+      <!--    <li><a class="dropdown-item" href="#">New project...</a></li>-->
+      <!--    <li><a class="dropdown-item" href="#">Settings</a></li>-->
+      <!--    <li><a class="dropdown-item" href="#">Profile</a></li>-->
+      <!--    <li><hr class="dropdown-divider"></li>-->
+      <!--    <li><a class="dropdown-item" href="#">Sign out</a></li>-->
+      <!--  </ul>-->
+      <!--</div>-->
 
-    </div>
+      <!--end user perofile sectio-->
+    </header>
+  </div>
 </nav>
