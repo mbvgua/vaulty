@@ -2,23 +2,23 @@
 delimiter #
  
 -- userViews 
-CREATE VIEW getUserBirdsView
+CREATE VIEW users_birds_view
 AS
-    SELECT users.user_name,users.email,birds.bird_type,birds.bird_details FROM users
+    SELECT users.user_name,users.email,birds.type,birds.details FROM users
     INNER JOIN birds
     ON users.id = birds.user_id
     WHERE users.is_deleted=0 AND birds.is_deleted=0;
 #
 
-CREATE VIEW getUserCoopsView 
+CREATE VIEW users_coops_view
 AS
-    SELECT users.user_name,users.email,users.role,coops.coop_name,coops.coop_details,coops.created_at FROM users
+    SELECT users.user_name,users.email,users.role,coops.name,coops.details,coops.created_at FROM users
     INNER JOIN coops
     ON users.id=coops.user_id
     WHERE users.is_deleted=0 AND coops.is_deleted=0; 
 #
 
-CREATE VIEW getUserExpensesView 
+CREATE VIEW users_expenses_view 
 AS
     SELECT users.user_name,users.email,users.role,expenses.category,expenses.amount,expenses.description,expenses.created_at FROM users
     INNER JOIN expenses
@@ -26,9 +26,9 @@ AS
     WHERE users.is_deleted=0 AND expenses.is_deleted=0;
 #
 
-CREATE VIEW getUserFeedsView
+CREATE VIEW users_feeds_view
 AS
-    SELECT users.user_name,users.email,users.role,feeds.feed_type,feeds.quantity,feeds.acquired_on FROM users
+    SELECT users.user_name,users.email,users.role,feeds.type,feeds.quantity,feeds.acquired_on FROM users
     INNER JOIN feeds
     ON users.id = feeds.user_id
     WHERE users.is_deleted=0 AND feeds.is_deleted=0;
@@ -36,25 +36,25 @@ AS
 
 
 -- coopViews
-CREATE VIEW getCoopBirdsView
+CREATE VIEW coops_birds_view
 AS
-    SELECT coops.coop_name,coops.coop_details,birds.bird_type,birds.bird_details FROM coops
+    SELECT coops.name,coops.details,birds.type,birds.details AS 'bird details' FROM coops
     INNER JOIN birds
     ON coops.bird_id = birds.id
     WHERE coops.is_deleted = 0 AND birds.is_deleted=0;
 #
 
-CREATE VIEW getCoopExpensesView
+CREATE VIEW coops_expenses_view
 AS
-    SELECT coops.coop_name,coops.coop_details,expenses.category,expenses.amount,expenses.description FROM coops
+    SELECT coops.name,coops.details,expenses.category,expenses.amount,expenses.description FROM coops
     INNER JOIN expenses
     ON coops.id = expenses.coop_id
     WHERE coops.is_deleted=0 AND expenses.is_deleted=0;
 #
 
-CREATE VIEW getCoopFeedsView
+CREATE VIEW coops_feeds_view
 AS
-    SELECT coops.coop_name,coops.coop_details,feeds.feed_type,feeds.quantity,feeds.acquired_on FROM coops
+    SELECT coops.name,coops.details,feeds.type,feeds.quantity,feeds.acquired_on FROM coops
     INNER JOIN feeds
     ON coops.id = feeds.coop_id
     WHERE coops.is_deleted=0 AND feeds.is_deleted=0;
