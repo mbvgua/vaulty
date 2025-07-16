@@ -19,7 +19,7 @@ export async function validationHelper(
       status: "error",
       message: "Validation error occurred: ",
       data: error.details[0].message,
-      metadata: {},
+      metadata: null,
     });
   }
 

@@ -27,22 +27,22 @@ CREATE INDEX role_index ON users(role);
 CREATE TABLE birds (
     id VARCHAR(255) PRIMARY KEY,
     user_id VARCHAR(255),
-    bird_type ENUM('broiler','kienyeji','layer') NOT NULL,
-    bird_details JSON,
+    type ENUM('broiler','kienyeji','layer') NOT NULL,
+    details JSON,
     is_deleted BOOLEAN DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 -- indexes
-CREATE INDEX bird_type_index ON birds(bird_type);
+CREATE INDEX bird_type_index ON birds(type);
 
 -- coops table
 CREATE TABLE coops (
     id VARCHAR(255) PRIMARY KEY,
     user_id VARCHAR(255),
     bird_id VARCHAR(255),
-    coop_name VARCHAR(100) NOT NULL,
-    coop_details JSON,
+    name VARCHAR(100) NOT NULL,
+    details JSON,
     is_deleted BOOLEAN DEFAULT 0,
     created_at DATE DEFAULT(CURRENT_DATE),
     last_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -51,7 +51,7 @@ CREATE TABLE coops (
 );
 
 -- indexes
-CREATE INDEX coop_name_index ON coops(coop_name);
+CREATE INDEX coop_name_index ON coops(name);
 
 -- expenses table
 CREATE TABLE expenses (
@@ -77,16 +77,15 @@ CREATE TABLE feeds (
     user_id VARCHAR(255),
     coop_id VARCHAR(255),
     expense_id VARCHAR(255),
-    feed_type ENUM('starter','grower','layer','broiler') NOT NULL,
+    type ENUM('starter','grower','layer','broiler') NOT NULL,
     quantity DECIMAL(10,2) NOT NULL,
     is_deleted BOOLEAN DEFAULT 0,
     acquired_on DATE DEFAULT(CURRENT_DATE),
-    estimated_finish DATE DEFAULT(CURRENT_DATE),
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (coop_id) REFERENCES coops(id),
     FOREIGN KEY (expense_id) REFERENCES expenses(id)
 );
 
 -- indexes
-CREATE INDEX feed_type_index ON feeds(feed_type);
+CREATE INDEX feed_type_index ON feeds(type);
 CREATE INDEX acquired_on_index ON feeds(acquired_on);

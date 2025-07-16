@@ -32,9 +32,9 @@ export const registerSchema = Joi.object({
       "string.trim":
         "Username cannot contain any whitespace before or after it",
       "string.min":
-        "Username should have a minimum length of {#length} characters",
+        "Username should have a minimum length of {#limit} characters",
       "string.max":
-        "Username shoulf have a maximum length of {#length} characters",
+        "Username should have a maximum length of {#limit} characters",
     }),
   email: Joi.string()
     .required()
@@ -66,7 +66,7 @@ export const registerSchema = Joi.object({
 });
 
 export const loginEmailSchema = Joi.object({
-  userNameOrEmail: Joi.string()
+  username_or_email: Joi.string()
     .required()
     .email({
       minDomainSegments: 2,
@@ -96,7 +96,7 @@ export const loginEmailSchema = Joi.object({
 });
 
 export const loginUserNameSchema = Joi.object({
-  userNameOrEmail: Joi.string()
+  username_or_email: Joi.string()
     .required()
     .alphanum()
     .lowercase()
@@ -112,9 +112,9 @@ export const loginUserNameSchema = Joi.object({
       "string.trim":
         "Username cannot contain any whitespace before or after it",
       "string.min":
-        "Username should have a minimum length of {#length} characters",
+        "Username should have a minimum length of {#limit} characters",
       "string.max":
-        "Username shoulf have a maximum length of {#length} characters",
+        "Username should have a maximum length of {#limit} characters",
     }),
   password: Joi.string()
     .required()

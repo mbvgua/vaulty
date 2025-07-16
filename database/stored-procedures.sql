@@ -26,22 +26,14 @@ BEGIN
     WHERE id=user_id AND is_deleted=0;
 END#
 
--- getUserByEmail
-CREATE PROCEDURE getUserByEmail(
-    IN email VARCHAR(100) 
+-- getUserByUsernameOrEmail
+CREATE PROCEDURE getUserByUsernameOrEmail(
+    IN username_or_email VARCHAR(100)
 )
 BEGIN
     SELECT * FROM users
-    WHERE email=email AND is_deleted=0;
-END#
-
--- getUserByUsername
-CREATE PROCEDURE getUserByUserName(
-    IN user_name VARCHAR(100)
-)
-BEGIN
-    SELECT * FROM users
-    WHERE user_name=user_name AND is_deleted=0;
+    WHERE (user_name=username_or_email OR email=username_or_email)
+    AND is_deleted=0;
 END#
 
 -- getAllUsers
@@ -83,11 +75,11 @@ END#
 
 -- deactivateUserAccount
 CREATE PROCEDURE deactivateUserAccount(
-    IN id VARCHAR(255)
+    IN user_id VARCHAR(255)
 )
 BEGIN
     UPDATE users SET is_deactivated=1
-    WHERE id=id;
+    WHERE id=user_id;
 END#
 
 -- deleteUserAccount
@@ -105,12 +97,12 @@ END#
 CREATE PROCEDURE addBird(
     IN id VARCHAR(255),
     IN user_id VARCHAR(255),
-    IN bird_type ENUM('broiler','kienyeji','layer'),
-    IN bird_details JSON
+    IN type ENUM('broiler','kienyeji','layer'),
+    IN details JSON
 )
 BEGIN
-    INSERT INTO birds(id,user_id,bird_type,bird_details)
-    VALUES(id,user_id,bird_type,bird_details);
+    INSERT INTO birds(id,user_id,type,details)
+    VALUES(id,user_id,type,details);
 END#
 
 -- getBirdById
@@ -131,12 +123,12 @@ END#
 -- updateBird
 CREATE PROCEDURE updateBird(
     IN id VARCHAR(255),
-    IN bird_type ENUM('broiler','kienyeji','layer'),
-    IN bird_details JSON
+    IN type ENUM('broiler','kienyeji','layer'),
+    IN details JSON
 )
 BEGIN
     UPDATE birds
-    SET bird_type=bird_type, bird_details=bird_details
+    SET type=type, details=details
     WHERE id=id AND is_deleted=0;
 END#
 
@@ -156,12 +148,12 @@ CREATE PROCEDURE addCoop(
     IN id VARCHAR(255),
     IN user_id VARCHAR(255),
     IN bird_id VARCHAR(255),
-    IN coop_name VARCHAR(255),
-    IN coop_details JSON
+    IN name VARCHAR(255),
+    IN details JSON
 )
 BEGIN
-    INSERT INTO coops(id,user_id,bird_id,coop_name,coop_details)
-    VALUES (id,user_id,bird_id,coop_name,coop_details);
+    INSERT INTO coops(id,user_id,bird_id,name,details)
+    VALUES (id,user_id,bird_id,name,details);
 END#
 
 -- getCoopById
@@ -179,7 +171,7 @@ CREATE PROCEDURE getCoopByName(
 )
 BEGIN
     SELECT * FROM coops
-    WHERE coop_name=coop_name AND is_deleted=0;
+    WHERE name=coop_name AND is_deleted=0;
 END#
 
 -- getAllCoops
@@ -194,12 +186,12 @@ CREATE PROCEDURE updateCoop(
     IN id VARCHAR(255),
     IN user_id VARCHAR(255),
     IN bird_id VARCHAR(255),
-    IN coop_name VARCHAR(100),
-    IN coop_details JSON
+    IN name VARCHAR(100),
+    IN details JSON
 )
 BEGIN
     UPDATE coops
-    SET user_id=user_id,bird_id=bird_id,coop_name=coop_name,coop_details=coop_details
+    SET user_id=user_id,bird_id=bird_id,name=name,details=details
     WHERE id=id AND is_deleted=0;
 END#
 
@@ -218,12 +210,12 @@ CREATE PROCEDURE addFeed(
     IN id VARCHAR(255),
     IN coop_id VARCHAR(255),
     IN expense_id VARCHAR(255),
-    IN feed_type ENUM('starter','grower','layer','broiler'),
+    IN type ENUM('starter','grower','layer','broiler'),
     IN quantity DECIMAL(10,2)
 )
 BEGIN
-    INSERT INTO feeds(id,coop_id,expense_id,feed_type,quantity)
-    VALUES(id,coop_id,expense_id,feed_type,quantity);
+    INSERT INTO feeds(id,coop_id,expense_id,type,quantity)
+    VALUES(id,coop_id,expense_id,type,quantity);
 END#
 
 -- getFeedById
@@ -237,11 +229,11 @@ END#
 
 -- getFeedByType
 CREATE PROCEDURE getFeedByType(
-    IN feed_type ENUM('starter','grower','layer','broiler')
+    IN type ENUM('starter','grower','layer','broiler')
 )
 BEGIN
     SELECT * FROM feeds
-    WHERE feed_type=feed_type AND is_deleted=0;
+    WHERE type=type AND is_deleted=0;
 END#
 
 -- getAllFeeds
@@ -255,12 +247,12 @@ CREATE PROCEDURE updateFeed(
     IN id VARCHAR(255),
     IN coop_id VARCHAR(255),
     IN expense_id VARCHAR(255),
-    IN feed_type ENUM('starter','grower','layer','broiler'),
+    IN type ENUM('starter','grower','layer','broiler'),
     IN quantity DECIMAL(10,2)
 )
 BEGIN
     UPDATE feeds
-    SET coop_id=coop_id,expense_id=expense_id,feed_type=feed_type,quantity=quantity
+    SET coop_id=coop_id,expense_id=expense_id,type=type,quantity=quantity
     WHERE id=id AND is_deleted=0;
 END#
 
