@@ -28,12 +28,11 @@ END#
 
 -- getUserByUsernameOrEmail
 CREATE PROCEDURE getUserByUsernameOrEmail(
-    IN user_email VARCHAR(100),
-    IN user_name VARCHAR(100)
+    IN username_or_email VARCHAR(100)
 )
 BEGIN
     SELECT * FROM users
-    WHERE (user_name=user_name OR email=user_email)
+    WHERE (user_name=username_or_email OR email=username_or_email)
     AND is_deleted=0;
 END#
 
