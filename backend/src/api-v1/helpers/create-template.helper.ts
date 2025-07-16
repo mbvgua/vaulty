@@ -17,7 +17,7 @@ export function createTemplate(pathToTemplate:string) {
         status: "success",
         message: "An error occurred: ",
         data: error,
-        metadata: {},
+        metadata: null,
       }),
     );
   }

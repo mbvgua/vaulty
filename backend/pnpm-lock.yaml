@@ -68,6 +68,9 @@ importers:
       express:
         specifier: 4.19.2
         version: 4.19.2
+      express-rate-limit:
+        specifier: ^7.5.1
+        version: 7.5.1(express@4.19.2)
       handlebars:
         specifier: ^4.7.8
         version: 4.7.8
@@ -1128,6 +1131,12 @@ packages:
   expect@30.0.3:
     resolution: {integrity: sha512-HXg6NvK35/cSYZCUKAtmlgCFyqKM4frEPbzrav5hRqb0GMz0E0lS5hfzYjSaiaE5ysnp/qI2aeZkeyeIAOeXzQ==}
     engines: {node: ^18.14.0 || ^20.0.0 || ^22.0.0 || >=24.0.0}
+
+  express-rate-limit@7.5.1:
+    resolution: {integrity: sha512-7iN8iPMDzOMHPUYllBEsQdWVB6fPDMPqwjBaFrgr4Jgr/+okjvzAy+UHlYYL/Vs0OsOrMkwS6PJDkFlJwoxUnw==}
+    engines: {node: '>= 16'}
+    peerDependencies:
+      express: '>= 4.11'
 
   express@4.19.2:
     resolution: {integrity: sha512-5T6nhjsT+EOMzuck8JjBHARTHfMht0POzlA60WV2pMD3gyXw2LZnZ+ueGdNxG+0calOJcWKbpFcuzLZ91YWq9Q==}
@@ -3513,6 +3522,10 @@ snapshots:
       jest-message-util: 30.0.2
       jest-mock: 30.0.2
       jest-util: 30.0.2
+
+  express-rate-limit@7.5.1(express@4.19.2):
+    dependencies:
+      express: 4.19.2
 
   express@4.19.2:
     dependencies:
