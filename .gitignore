@@ -2,10 +2,7 @@
 .env
 
 # too large
-node_modules/
-
-# can be recreated
-dist/
+.venv/
 
 #ignore all the logs
 logs/**/*.log
